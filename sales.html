@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anton Uniforms — Sales</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --bg:#f2f2f7; --card:#ffffff; --separator:rgba(60,60,67,0.12); --separator2:rgba(60,60,67,0.06);
+  --label:#000000; --label2:rgba(60,60,67,0.6); --label3:rgba(60,60,67,0.3);
+  --blue:#007AFF; --blue-light:rgba(0,122,255,0.12);
+  --green:#34C759; --green-light:rgba(52,199,89,0.12);
+  --red:#FF3B30; --red-light:rgba(255,59,48,0.12);
+  --orange:#FF9500; --orange-light:rgba(255,149,0,0.12);
+  --gold:#B8860B;
+  --radius-sm:10px; --radius:13px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--label);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--separator);padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(145deg,#B8860B,#DAA520);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(184,134,11,0.35)}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-size:15px;font-weight:700;color:var(--label);letter-spacing:-0.3px;line-height:1.2}
+.logo-sub{font-size:11px;font-weight:500;color:var(--label2)}
+.conn-status{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;transition:all .3s}
+.conn-status.online{color:var(--green);background:var(--green-light)}
+.conn-status.offline{color:var(--red);background:var(--red-light)}
+.conn-status.connecting{color:var(--orange);background:var(--orange-light)}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.conn-dot.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.35)}}
+
+/* PAGE */
+.page{padding:0 0 80px}
+.page-header{padding:20px 20px 4px}
+.page-title{font-size:28px;font-weight:800;color:var(--label);letter-spacing:-0.6px}
+.page-sub{font-size:14px;color:var(--label2);margin-top:3px}
+
+/* SECTIONS */
+.ios-section{margin:20px 16px 0}
+.ios-section-label{font-size:13px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;padding-left:4px}
+.ios-card{background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden}
+.ios-input{width:100%;background:transparent;border:none;outline:none;font-family:var(--font);font-size:16px;font-weight:400;color:var(--label);padding:13px 16px;display:block;-webkit-appearance:none;appearance:none}
+.ios-input::placeholder{color:var(--label3)}
+.ios-textarea{width:100%;background:transparent;border:none;outline:none;font-family:var(--font);font-size:16px;color:var(--label);padding:13px 16px;resize:none;height:80px;display:block}
+.ios-textarea::placeholder{color:var(--label3)}
+.row-divider{height:0.5px;background:var(--separator2);margin:0 16px}
+select.ios-input option{background:#fff;color:#000}
+
+/* SP BAR */
+.sp-bar{display:flex;align-items:center;background:var(--card);border-radius:var(--radius-lg);padding:13px 16px;box-shadow:var(--shadow-sm);gap:12px}
+.sp-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;text-transform:uppercase}
+.sp-info{flex:1;min-width:0}
+.sp-name{font-size:15px;font-weight:700;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-hint{font-size:12px;color:var(--label2);margin-top:1px}
+.sp-change-btn{background:var(--bg);border:none;border-radius:20px;padding:6px 14px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;flex-shrink:0}
+
+/* CART */
+.cart-empty-card{background:var(--card);border-radius:var(--radius-lg);padding:24px 16px;text-align:center;box-shadow:var(--shadow-sm)}
+.cart-empty-icon{font-size:32px;margin-bottom:8px}
+.cart-empty-text{font-size:15px;font-weight:500;color:var(--label2)}
+.cart-item-card{background:var(--card);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:12px;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
+.cart-item-icon{width:36px;height:36px;border-radius:9px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cart-item-body{flex:1}
+.cart-item-name{font-size:15px;font-weight:600;color:var(--label)}
+.cart-item-detail{font-size:13px;color:var(--label2);margin-top:3px;line-height:1.4}
+.cart-remove-btn{width:28px;height:28px;border-radius:50%;background:var(--red-light);border:none;color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+
+/* ITEM TYPE CARDS */
+.item-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;padding:14px 16px 16px}
+.item-type-card{background:var(--bg);border:1.5px solid var(--separator);border-radius:var(--radius);padding:14px 6px 11px;cursor:pointer;transition:all .18s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.item-type-card.selected{background:var(--blue-light);border-color:var(--blue)}
+.item-type-card:active{transform:scale(0.95)}
+.item-type-card-icon{font-size:26px;line-height:1}
+.item-type-card-label{font-size:12px;font-weight:600;color:var(--label2);line-height:1.2}
+.item-type-card.selected .item-type-card-label{color:var(--blue)}
+.other-select-wrap{padding:0 16px 14px;display:none}
+.other-select-wrap.visible{display:block}
+
+/* COLOR CHIPS */
+.color-chips-wrap{padding:12px 16px 16px}
+.color-chips-grid{display:flex;flex-wrap:wrap;gap:8px}
+.color-chip{display:inline-flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--separator);border-radius:22px;padding:7px 13px 7px 8px;cursor:pointer;transition:all .15s;font-family:var(--font);font-size:13px;font-weight:600;color:var(--label2)}
+.color-chip.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.color-chip:active{transform:scale(0.95)}
+.color-swatch{width:18px;height:18px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.1)}
+
+/* SIZE GRID */
+.size-wrap{padding:12px 16px 16px;background:var(--card)}
+.size-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.size-btn{background:var(--bg);border:1.5px solid var(--separator);border-radius:var(--radius-sm);color:var(--label2);font-family:var(--font);font-weight:600;font-size:14px;padding:11px 4px;cursor:pointer;transition:all .15s;text-align:center}
+.size-btn.selected{background:var(--blue);border-color:var(--blue);color:#fff;transform:scale(1.04);box-shadow:0 2px 8px rgba(0,122,255,0.3)}
+
+/* QTY STEPPER */
+.qty-wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--card)}
+.qty-label-text{font-size:16px;color:var(--label)}
+.qty-stepper{display:flex;align-items:center;background:var(--bg);border-radius:22px;overflow:hidden}
+.qty-btn{width:36px;height:36px;background:transparent;border:none;color:var(--blue);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:500;user-select:none}
+.qty-num{font-size:17px;font-weight:600;color:var(--label);min-width:32px;text-align:center}
+
+/* PRIORITY */
+.priority-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px;background:var(--card)}
+.priority-btn{border-radius:var(--radius-sm);padding:12px 10px;border:1.5px solid var(--separator);cursor:pointer;font-family:var(--font);font-weight:600;font-size:14px;text-align:center;transition:all .15s;background:var(--bg);color:var(--label2);display:flex;align-items:center;justify-content:center;gap:6px}
+.priority-btn.normal.selected{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.priority-btn.urgent.selected{background:var(--red-light);border-color:var(--red);color:var(--red)}
+
+/* ADD / SUBMIT BUTTONS */
+.add-item-btn{width:100%;background:var(--card);border:none;border-radius:var(--radius-lg);color:var(--blue);font-family:var(--font);font-weight:600;font-size:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;gap:8px}
+.add-item-btn:active{background:var(--blue-light)}
+.primary-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,122,255,0.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.primary-btn:active{transform:scale(0.98)}
+.primary-btn:disabled{opacity:.45;cursor:default}
+
+/* STEP INDICATOR */
+.step-row{display:flex;align-items:center;gap:8px;padding:0 4px;margin-bottom:6px}
+.step-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .2s}
+.step-dot.done{background:var(--green);color:#fff}
+.step-dot.active{background:var(--blue);color:#fff}
+.step-dot.idle{background:var(--bg);color:var(--label3);border:1.5px solid var(--separator)}
+.step-line{flex:1;height:1.5px;background:var(--separator);border-radius:1px}
+
+/* DYNAMIC SECTIONS */
+.dynamic-section{opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;max-height:0;overflow:hidden}
+.dynamic-section.visible{opacity:1;pointer-events:all;transform:translateY(0);max-height:2000px}
+
+/* TOAST */
+.toast{position:fixed;bottom:34px;left:50%;transform:translateX(-50%) translateY(80px) scale(0.95);background:rgba(50,50,50,0.92);backdrop-filter:blur(12px);color:#fff;padding:12px 22px;border-radius:22px;font-weight:600;font-size:14px;z-index:999;transition:transform .35s cubic-bezier(.34,1.4,.64,1),opacity .25s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.25);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0) scale(1);opacity:1}
+.toast.error{background:rgba(255,59,48,0.92)}
+
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;animation:fadeBackdrop .2s ease}
+@keyframes fadeBackdrop{from{opacity:0}to{opacity:1}}
+.modal-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:12px 24px 48px;width:100%;animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--separator);border-radius:2px;margin:0 auto 22px}
+.modal-title{font-size:24px;font-weight:800;color:var(--label);letter-spacing:-0.5px;margin-bottom:6px}
+.modal-sub{font-size:15px;color:var(--label2);margin-bottom:24px;line-height:1.5}
+.modal-input{width:100%;background:var(--bg);border:none;outline:none;border-radius:var(--radius-lg);font-family:var(--font);font-size:18px;font-weight:500;color:var(--label);padding:16px 18px;margin-bottom:14px;-webkit-appearance:none}
+.modal-input::placeholder{color:var(--label3)}
+.modal-confirm-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,122,255,0.3)}
+
+@keyframes springIn{from{opacity:0;transform:scale(0.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.mt8{margin-top:8px}
+
+/* LIVE ORDER TRACKER */
+.live-order-card{background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
+.live-order-accent{height:4px}
+.live-order-accent.requested{background:linear-gradient(90deg,var(--orange),#FFCC00)}
+.live-order-accent.retrieving{background:linear-gradient(90deg,var(--blue),#5856D6)}
+.live-order-accent.ready{background:linear-gradient(90deg,var(--green),#30B0C7)}
+.live-order-body{padding:13px 16px}
+.live-order-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.live-order-family{font-size:16px;font-weight:800;color:var(--label);letter-spacing:-0.3px}
+.live-order-meta{font-size:12px;color:var(--label2);margin-top:2px}
+.live-order-status{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;flex-shrink:0}
+.live-order-status.requested{background:var(--orange-light);color:var(--orange)}
+.live-order-status.retrieving{background:var(--blue-light);color:var(--blue)}
+.live-order-status.ready{background:var(--green-light);color:var(--green)}
+.bin-callout{display:flex;align-items:center;gap:10px;background:var(--green-light);border-radius:var(--radius-sm);padding:11px 14px;margin-top:10px}
+.bin-callout-icon{font-size:22px;flex-shrink:0}
+.bin-callout-text{flex:1}
+.bin-callout-label{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.5px}
+.bin-callout-num{font-size:22px;font-weight:800;color:var(--green);letter-spacing:-0.5px;line-height:1.1}
+.orders-empty{text-align:center;padding:20px;background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.orders-empty-text{font-size:14px;color:var(--label2)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-mark">AU</div>
+    <div class="logo-text">
+      <div class="logo-name">Anton Uniforms</div>
+      <div class="logo-sub">Sales Floor</div>
+    </div>
+  </div>
+  <div class="conn-status connecting" id="conn-status">
+    <div class="conn-dot pulse"></div>
+    <span id="conn-text">Connecting</span>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">New Request</div>
+    <div class="page-sub">Build your order, then send to warehouse</div>
+  </div>
+
+  <!-- Salesperson -->
+  <div class="ios-section">
+    <div class="ios-section-label">Selling as</div>
+    <div class="sp-bar" id="sp-bar">
+      <div class="sp-avatar" id="sp-avatar">?</div>
+      <div class="sp-info">
+        <div class="sp-name" id="sp-name-display">Loading…</div>
+        <div class="sp-hint">All requests tagged to you</div>
+      </div>
+      <button class="sp-change-btn" onclick="promptName(true)">Not you?</button>
+    </div>
+  </div>
+
+  <!-- Live Order Tracker -->
+  <div class="ios-section" id="live-orders-section" style="display:none">
+    <div class="ios-section-label">Your Active Orders</div>
+    <div id="live-orders-list"></div>
+  </div>
+
+  <!-- Family Name -->
+  <div class="ios-section">
+    <div class="ios-section-label">Family Name <span style="color:var(--red);font-size:12px">Required</span></div>
+    <div class="ios-card">
+      <input class="ios-input" type="text" id="family-name" placeholder="e.g. Smith Family" autocomplete="off" autocorrect="off" autocapitalize="words">
+    </div>
+  </div>
+
+  <!-- Cart -->
+  <div class="ios-section">
+    <div class="ios-section-label">Order Items (<span id="cart-count">0</span>)</div>
+    <div id="cart-display">
+      <div class="cart-empty-card">
+        <div class="cart-empty-icon">🛒</div>
+        <div class="cart-empty-text">No items yet — add items below</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: School -->
+  <div class="ios-section">
+    <div class="step-row">
+      <div class="step-dot active" id="step1-dot">1</div>
+      <div class="step-line"></div>
+      <div class="step-dot idle" id="step2-dot">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot idle" id="step3-dot">3</div>
+      <div class="step-line"></div>
+      <div class="step-dot idle" id="step4-dot">4</div>
+    </div>
+    <div class="ios-section-label" style="margin-top:10px">Step 1 — School</div>
+    <div class="ios-card">
+      <select class="ios-input" id="school" onchange="onSchoolChange()">
+        <option value="">Select School…</option>
+        <option>Anthem Preparatory Academy</option><option>Archway Anthem</option><option>Archway Arete</option>
+        <option>Archway Chandler</option><option>Archway Cicero</option><option>Archway Glendale</option>
+        <option>Archway Lincoln</option><option>Archway North Phoenix</option><option>Archway Roosevelt</option>
+        <option>Archway Scottsdale</option><option>Archway Trivium</option><option>Archway Veritas</option>
+        <option>Arete Preparatory Academy</option><option>Arizona College Preparatory</option>
+        <option>Arrowhead Christian Academy</option><option>Blessed Sacrament Catholic School</option>
+        <option>Candeo Peoria</option><option>Caritas Christian Academy</option>
+        <option>Chandler Preparatory Academy</option><option>Christ Lutheran</option>
+        <option>Christ The King Catholic School</option><option>Cicero Preparatory Academy</option>
+        <option>Glendale Preparatory Academy</option><option>Grace Christian Academy</option>
+        <option>Heritage Academy</option><option>Lincoln Preparatory Academy</option>
+        <option>Madison Traditional Academy</option><option>Maricopa Institute Of Technology</option>
+        <option>Maryvale Preparatory Academy</option><option>Most Holy Trinity</option>
+        <option>North Phoenix Preparatory</option><option>Notre Dame Preparatory High School</option>
+        <option>Our Lady Of Mount Carmel</option><option>Our Lady Of Perpetual Help Glendale</option>
+        <option>Our Lady Of Perpetual Help Scottsdale</option><option>Our Lady Of Sorrows</option>
+        <option>Paradise Valley Christian Preparatory</option><option>Paul Revere Academy</option>
+        <option>Queen Of Peace Catholic School</option><option>Rancho Solano</option>
+        <option>Roosevelt Preparatory</option><option>Sacred Heart Catholic School</option>
+        <option>Scottsdale Christian Academy</option><option>Scottsdale Preparatory Academy</option>
+        <option>Seton Catholic Preparatory</option><option>St. Agnes Catholic School</option>
+        <option>St. Catherine Of Siena</option><option>St. Gregory Catholic School</option>
+        <option>St. John Bosco Catholic School</option><option>St. John Paul II Catholic High School</option>
+        <option>St. Mary Basha Catholic School</option><option>St. Mary's High School</option>
+        <option>St. Theresa Catholic School</option><option>St. Thomas Aquinas</option>
+        <option>St. Timothy Catholic School</option><option>St. Vincent de Paul Catholic School</option>
+        <option>Trivium Preparatory Academy</option><option>Veritas Preparatory Academy</option>
+        <option>Ville De Marie Academy</option><option>Xavier College Preparatory</option>
+        <option>Other / Essentials</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Step 2: Item Type -->
+  <div class="ios-section dynamic-section" id="section-item">
+    <div class="ios-section-label">Step 2 — Item Type</div>
+    <div class="ios-card">
+      <div class="item-type-grid">
+        <button class="item-type-card" onclick="selectItemType('Polo',this)"><div class="item-type-card-icon">👔</div><div class="item-type-card-label">Polo</div></button>
+        <button class="item-type-card" onclick="selectItemType('Shorts',this)"><div class="item-type-card-icon">🩳</div><div class="item-type-card-label">Shorts</div></button>
+        <button class="item-type-card" onclick="selectItemType('Pants',this)"><div class="item-type-card-icon">👖</div><div class="item-type-card-label">Pants</div></button>
+        <button class="item-type-card" onclick="selectItemType('Skirt / Skort',this)"><div class="item-type-card-icon">👗</div><div class="item-type-card-label">Skirt / Skort</div></button>
+        <button class="item-type-card" onclick="selectItemType('Oxford Shirt',this)"><div class="item-type-card-icon">🔘</div><div class="item-type-card-label">Oxford Shirt</div></button>
+        <button class="item-type-card" id="other-item-card" onclick="toggleOtherItem(this)"><div class="item-type-card-icon">＋</div><div class="item-type-card-label">Other</div></button>
+      </div>
+      <div class="other-select-wrap" id="other-select-wrap">
+        <select class="ios-input" id="other-item-select" onchange="selectOtherItemType(this.value)" style="margin-bottom:0">
+          <option value="">Select item type…</option>
+          <option>Button-Down Shirt</option><option>T-Shirt</option><option>Blouse</option>
+          <option>Cardigan / Sweater</option><option>Sweatshirt / Hoodie</option>
+          <option>Jacket / Fleece</option><option>Jumper / Dress</option>
+          <option>Vest</option><option>Tie</option><option>Belt</option>
+          <option>Socks / Tights</option><option>PE Uniform</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Color -->
+  <div class="ios-section dynamic-section" id="section-color">
+    <div class="ios-section-label">Step 3 — Color</div>
+    <div class="ios-card">
+      <div class="color-chips-wrap">
+        <div class="color-chips-grid" id="color-chips-grid"></div>
+      </div>
+      <div id="plaid-select-wrap" style="display:none;padding:0 16px 14px">
+        <div class="row-divider" style="margin:0 0 14px"></div>
+        <select class="ios-input" id="plaid-select" onchange="selectPlaid(this.value)" style="margin-bottom:0;background:var(--bg);border-radius:var(--radius-sm)">
+          <option value="">Select plaid code…</option>
+          <option>Hamilton Plaid</option><option>Marymount Plaid</option><option>Wilson Plaid</option>
+          <option>Grant Plaid</option><option>Macbeth Plaid</option><option>Carden Plaid</option>
+          <option>Christopher Plaid</option><option>Alexander Plaid</option><option>Mayfair Plaid</option>
+          <option>Navy White Shadow Plaid</option><option>Fremont Plaid</option><option>Liberty Plaid</option>
+          <option>Douglas Plaid</option><option>Woodland Plaid</option><option>Belair Plaid</option>
+          <option>Tyler Plaid</option><option>PLD03E</option><option>PLD1A</option><option>PLD1B</option>
+          <option>PLD1F</option><option>PLD220</option><option>PLD246</option><option>PLD26</option>
+          <option>PLD2A</option><option>PLD2M</option><option>PLD35</option><option>PLD36</option>
+          <option>PLD38N</option><option>PLD41</option><option>PLD42</option><option>PLD46</option>
+          <option>PLD49</option><option>PLD50</option><option>PLD510</option><option>PLD56</option>
+          <option>PLD599</option><option>PLD69</option><option>PLD72</option><option>PLD73</option>
+          <option>PLD75</option><option>PLD79</option><option>PLD82</option><option>PLD83</option>
+          <option>PLD8B</option><option>PLD92</option><option>PLD93</option><option>PLD96</option>
+          <option>PLD98</option><option>LANCASTER</option><option>PLDAPU</option><option>PLDKW</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Sizes -->
+  <div class="ios-section dynamic-section" id="section-sizes">
+    <div class="ios-section-label">Step 4 — Sizes <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--label2)">— tap multiple</span></div>
+    <div class="ios-card">
+      <div class="size-wrap"><div class="size-grid" id="size-grid"></div></div>
+      <div class="row-divider"></div>
+      <div class="qty-wrap">
+        <span class="qty-label-text">Quantity <span style="font-size:13px;color:var(--label2);font-weight:400">per size</span></span>
+        <div class="qty-stepper">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-num" id="qty-display">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <div class="row-divider"></div>
+      <textarea class="ios-textarea" id="item-notes" placeholder="Notes for this item (optional)"></textarea>
+    </div>
+  </div>
+
+  <div class="ios-section mt8 dynamic-section" id="section-add-btn">
+    <button class="add-item-btn" onclick="addToCart()"><span style="font-size:18px;line-height:1">＋</span> Add Item to Order</button>
+  </div>
+
+  <!-- Priority -->
+  <div class="ios-section">
+    <div class="ios-section-label">Priority</div>
+    <div class="ios-card">
+      <div class="priority-wrap">
+        <button class="priority-btn normal selected" id="urg-normal" onclick="setUrgency('normal')">✓ Normal</button>
+        <button class="priority-btn urgent" id="urg-urgent" onclick="setUrgency('urgent')">⚡ Urgent</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ios-section mt8">
+    <button class="primary-btn" id="submit-btn" onclick="submitRequest()">Send to Warehouse</button>
+  </div>
+</div>
+
+<!-- Name Modal -->
+<div class="modal-backdrop" id="name-modal" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Who are you?</div>
+    <div class="modal-sub">Enter your name once — it stays set all session so every request is tagged to you.</div>
+    <input class="modal-input" type="text" id="modal-name-input" placeholder="Your name or station…" autocomplete="off" maxlength="40">
+    <button class="modal-confirm-btn" onclick="confirmName()">Start Taking Requests</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously }      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC6zm-642fbrpKRknIhJkTUm1esUsXDTHQ",
+  authDomain:"anton-uniforms.firebaseapp.com",
+  databaseURL:"https://anton-uniforms-default-rtdb.firebaseio.com",
+  projectId:"anton-uniforms",
+  storageBucket:"anton-uniforms.firebasestorage.app",
+  messagingSenderId:"539546407658",
+  appId:"1:539546407658:web:1b76e5334f7f87e6103d93"
+});
+const db=getDatabase(app), auth=getAuth(app);
+const reqRef=ref(db,'requests');
+
+// Connection
+const connEl=document.getElementById('conn-status'), connText=document.getElementById('conn-text');
+function setConn(s){ connEl.className='conn-status '+s; connEl.querySelector('.conn-dot').className='conn-dot'+(s==='connecting'?' pulse':''); connText.textContent=s==='online'?'Live':s==='offline'?'Offline':'Connecting'; }
+signInAnonymously(auth).catch(()=>setConn('offline'));
+let myOrders={};
+onValue(reqRef,(snap)=>{
+  setConn('online');
+  const all=snap.val()||{};
+  // Filter to orders submitted by this salesperson this session
+  myOrders={};
+  Object.entries(all).forEach(([key,val])=>{
+    if(val.salesperson===sessionName) myOrders[key]=val;
+  });
+  renderMyOrders();
+},()=>setConn('offline'));
+
+// Session name
+let sessionName = sessionStorage.getItem('anton_sp_name')||'';
+function initName(){ if(!sessionName){ promptName(false); } else { renderSpBar(); } }
+function renderSpBar(){ const i=sessionName.split(' ').map(w=>w[0]).slice(0,2).join(''); document.getElementById('sp-avatar').textContent=i||'?'; document.getElementById('sp-name-display').textContent=sessionName; }
+window.promptName=(allowDismiss)=>{ const m=document.getElementById('name-modal'),inp=document.getElementById('modal-name-input'); m.style.display='flex'; inp.value=sessionName||''; setTimeout(()=>inp.focus(),350); m.onclick=(e)=>{ if(allowDismiss&&e.target===m) m.style.display='none'; }; };
+window.confirmName=()=>{ const v=document.getElementById('modal-name-input').value.trim(); if(!v){ document.getElementById('modal-name-input').focus(); return; } sessionName=v; sessionStorage.setItem('anton_sp_name',v); renderSpBar(); document.getElementById('name-modal').style.display='none'; };
+document.getElementById('modal-name-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.confirmName(); });
+initName();
+
+// State
+let cart=[], selectedSizes=new Set(), builderItemType='', selectedColor='', qty=1, urgency='normal';
+
+// Step helpers
+function setStep(n){ for(let i=1;i<=4;i++){ const d=document.getElementById('step'+i+'-dot'); if(!d)continue; d.className=i<n?'step-dot done':i===n?'step-dot active':'step-dot idle'; d.textContent=i<n?'✓':i; } }
+function showSection(id){ document.getElementById(id).classList.add('visible'); }
+function hideSection(id){ document.getElementById(id).classList.remove('visible'); }
+
+// Inventory data
+const ITEM_DATA={
+  'Polo':{colors:[{name:'White',hex:'#FFFFFF'},{name:'Navy',hex:'#1a2d5a'},{name:'Light Blue',hex:'#add8e6'},{name:'Dark Navy',hex:'#0d1b3e'},{name:'Red',hex:'#cc2222'},{name:'Black',hex:'#111111'},{name:'Dark Green',hex:'#1a4a2e'},{name:'Royal',hex:'#2055b8'},{name:'Cardinal',hex:'#8b1a2e'},{name:'Purple',hex:'#5b2a8e'},{name:'Ash Grey',hex:'#b0b0b0'},{name:'Maroon',hex:'#6b1a2a'},{name:'Gold',hex:'#c9a84c'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','XS','S','M','L','XL','2XL','3XL']},
+  'Shorts':{colors:[{name:'Khaki',hex:'#c8a96e'},{name:'Navy',hex:'#1a2d5a'},{name:'White',hex:'#FFFFFF'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Royal',hex:'#2055b8'},{name:'Green',hex:'#2a6e3a'},{name:'Red',hex:'#cc2222'},{name:'Sky Blue',hex:'#87ceeb'}],sizes:['YXXXS','YXXS','YXS','YS','YM','YL','YXL','4','6','8','10','12','14','16','18','XS','S','M','L','XL','2XL','26','28']},
+  'Pants':{colors:[{name:'Khaki',hex:'#c8a96e'},{name:'Navy',hex:'#1a2d5a'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Charcoal',hex:'#444444'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','XS','S','M','L','XL','2XL','26','28','30','32','34','36','38']},
+  'Skirt / Skort':{colors:[{name:'Navy',hex:'#1a2d5a'},{name:'Khaki',hex:'#c8a96e'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Plaid',hex:null,isPlaid:true}],sizes:['3','4','5','6','6X','7','8','10','12','14','16','18','2','XS','S','M','L','XL']},
+  'Oxford Shirt':{colors:[{name:'White',hex:'#FFFFFF'},{name:'Light Blue',hex:'#add8e6'},{name:'Blue',hex:'#3a6ab8'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','4','6','8','10','12','14','16','18','XS','S','M','L','XL','2XL']}
+};
+const OTHER_COLORS=[{name:'Navy',hex:'#1a2d5a'},{name:'White',hex:'#FFFFFF'},{name:'Khaki',hex:'#c8a96e'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Red',hex:'#cc2222'},{name:'Royal',hex:'#2055b8'},{name:'Light Blue',hex:'#add8e6'},{name:'Dark Green',hex:'#1a4a2e'}];
+const OTHER_SIZES=['XS','S','M','L','XL','2XL','4','6','8','10','12','14','16'];
+
+window.onSchoolChange=()=>{
+  const val=document.getElementById('school').value;
+  if(val){ showSection('section-item'); setStep(2); }
+  else { ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1); }
+  builderItemType=''; selectedColor='';
+  document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
+  hideSection('section-color'); hideSection('section-sizes'); hideSection('section-add-btn');
+};
+
+window.selectItemType=(type,btn)=>{
+  builderItemType=type; selectedColor='';
+  document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('other-select-wrap').classList.remove('visible');
+  renderColorChips(ITEM_DATA[type]?.colors||OTHER_COLORS);
+  showSection('section-color'); setStep(3);
+  hideSection('section-sizes'); hideSection('section-add-btn');
+  selectedSizes=new Set();
+  setTimeout(()=>document.getElementById('section-color').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+};
+window.toggleOtherItem=(btn)=>{ btn.classList.toggle('selected'); document.getElementById('other-select-wrap').classList.toggle('visible'); document.getElementById('other-item-select').value=''; };
+window.selectOtherItemType=(val)=>{ if(!val)return; builderItemType=val; selectedColor=''; document.getElementById('other-item-card').classList.add('selected'); renderColorChips(OTHER_COLORS); showSection('section-color'); setStep(3); hideSection('section-sizes'); hideSection('section-add-btn'); selectedSizes=new Set(); };
+
+function renderColorChips(colors){
+  const grid=document.getElementById('color-chips-grid');
+  document.getElementById('plaid-select-wrap').style.display='none';
+  document.getElementById('plaid-select').value='';
+  grid.innerHTML=colors.map(c=>{
+    const s=c.hex?(c.hex==='#FFFFFF'?'background:#fff;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,0.18);':'background:'+c.hex+';'):'background:repeating-linear-gradient(45deg,#c8a96e,#c8a96e 4px,#1a2d5a 4px,#1a2d5a 8px);';
+    return `<button class="color-chip${c.isPlaid?' plaid-chip':''}" onclick="selectColor('${c.name}',this,${c.isPlaid||false})"><span class="color-swatch" style="${s}"></span>${c.name}</button>`;
+  }).join('');
+}
+window.selectColor=(name,btn,isPlaid)=>{
+  document.querySelectorAll('.color-chip').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected'); selectedColor=name;
+  if(isPlaid){ document.getElementById('plaid-select-wrap').style.display='block'; document.getElementById('plaid-select').value=''; selectedColor=''; return; }
+  document.getElementById('plaid-select-wrap').style.display='none';
+  renderSizeGrid(builderItemType);
+  showSection('section-sizes'); setStep(4); showSection('section-add-btn');
+  setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+};
+window.selectPlaid=(val)=>{ if(!val)return; selectedColor=val; renderSizeGrid(builderItemType); showSection('section-sizes'); setStep(4); showSection('section-add-btn'); setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100); };
+function renderSizeGrid(type){ const grid=document.getElementById('size-grid'); selectedSizes=new Set(); const sizes=(ITEM_DATA[type]||{}).sizes||OTHER_SIZES; grid.innerHTML=sizes.map(s=>`<button class="size-btn" onclick="toggleSize(this,'${s}')">${s}</button>`).join(''); }
+
+window.toggleSize=(btn,size)=>{ btn.classList.toggle('selected'); selectedSizes.has(size)?selectedSizes.delete(size):selectedSizes.add(size); };
+window.changeQty=(delta)=>{ qty=Math.max(1,Math.min(20,qty+delta)); document.getElementById('qty-display').textContent=qty; };
+window.setUrgency=(u)=>{ urgency=u; document.getElementById('urg-normal').classList.toggle('selected',u==='normal'); document.getElementById('urg-urgent').classList.toggle('selected',u==='urgent'); };
+
+window.addToCart=()=>{
+  const school=document.getElementById('school').value;
+  if(!school){toast('Select a school first',true);return;}
+  if(!builderItemType){toast('Select an item type',true);return;}
+  if(!selectedColor){toast('Select a color',true);return;}
+  if(selectedSizes.size===0){toast('Select at least one size',true);return;}
+  const notes=document.getElementById('item-notes').value.trim();
+  cart.push({school,itemType:builderItemType,color:selectedColor,sizes:[...selectedSizes],qty,notes});
+  resetBuilder(false); renderCart();
+  toast('Item added ✓');
+};
+window.removeFromCart=(idx)=>{ cart.splice(idx,1); renderCart(); };
+
+function renderCart(){
+  const el=document.getElementById('cart-display');
+  document.getElementById('cart-count').textContent=cart.length;
+  if(cart.length===0){ el.innerHTML='<div class="cart-empty-card"><div class="cart-empty-icon">🛒</div><div class="cart-empty-text">No items yet — add items below</div></div>'; return; }
+  el.innerHTML=cart.map((item,i)=>`<div class="cart-item-card"><div class="cart-item-icon">👕</div><div class="cart-item-body"><div class="cart-item-name">${esc(item.itemType)}${item.color?' — '+esc(item.color):''}</div><div class="cart-item-detail">${esc(item.school)} · Sizes: <strong>${item.sizes.join(', ')}</strong> · Qty ${item.qty} each${item.notes?'<br><em>'+esc(item.notes)+'</em>':''}</div></div><button class="cart-remove-btn" onclick="removeFromCart(${i})">✕</button></div>`).join('');
+}
+
+function resetBuilder(fullReset){
+  if(fullReset){ document.getElementById('school').value=''; ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1); }
+  else { ['section-color','section-sizes','section-add-btn'].forEach(hideSection); showSection('section-item'); setStep(2); }
+  document.getElementById('item-notes').value='';
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.color-chip').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('other-select-wrap').classList.remove('visible');
+  document.getElementById('plaid-select-wrap').style.display='none';
+  builderItemType=''; selectedColor=''; selectedSizes=new Set(); qty=1;
+  document.getElementById('qty-display').textContent='1';
+}
+
+function renderMyOrders(){
+  const section=document.getElementById('live-orders-section');
+  const list=document.getElementById('live-orders-list');
+  const orders=Object.entries(myOrders).map(([key,val])=>({key,...val}))
+    .filter(r=>r.status!=='') 
+    .sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  if(orders.length===0){ section.style.display='none'; return; }
+  section.style.display='block';
+  const statusLabel={requested:'In Queue',retrieving:'Being Picked',ready:'Ready for Pickup'};
+  const statusIcon={requested:'⏳',retrieving:'↗',ready:'✓'};
+  list.innerHTML=orders.map(r=>{
+    const itemSummary=r.items&&r.items.length===1?r.items[0].itemType+(r.items[0].color?' · '+r.items[0].color:''):((r.items||[]).length+' items');
+    const binHtml=r.status==='ready'&&r.binNumber?`<div class="bin-callout"><div class="bin-callout-icon">📦</div><div class="bin-callout-text"><div class="bin-callout-label">Pick up from</div><div class="bin-callout-num">Bin ${esc(String(r.binNumber))}</div></div></div>`:'';
+    return `<div class="live-order-card">
+      <div class="live-order-accent ${r.status}"></div>
+      <div class="live-order-body">
+        <div class="live-order-top">
+          <div>
+            <div class="live-order-family">${esc(r.familyName||'—')}</div>
+            <div class="live-order-meta">${esc(r.items&&r.items[0]?r.items[0].school:'—')} · ${esc(itemSummary)}</div>
+          </div>
+          <div class="live-order-status ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</div>
+        </div>
+        ${binHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.submitRequest=async()=>{
+  if(!sessionName){promptName(false);return;}
+  const familyName=document.getElementById('family-name').value.trim();
+  if(!familyName){ document.getElementById('family-name').focus(); toast('Please enter a family name',true); return; }
+  if(cart.length===0){ toast('Add at least one item first',true); return; }
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true; btn.textContent='Sending…';
+  try{
+    await push(reqRef,{ salesperson:sessionName, familyName, items:cart, urgency, status:'requested', claimedBy:'', time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), submittedAt:Date.now(), timestamp:Date.now() });
+    toast('✓ Sent to warehouse');
+    cart=[]; renderCart(); resetBuilder(true);
+    document.getElementById('family-name').value='';
+    window.setUrgency('normal');
+    renderMyOrders();
+  }catch(e){ toast('Failed — check connection',true); }
+  btn.disabled=false; btn.textContent='Send to Warehouse';
+};
+
+function toast(msg,isError){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(isError?' error':''); setTimeout(()=>t.className='toast'+(isError?' error':''),2800); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>

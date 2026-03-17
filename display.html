@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anton Uniforms — Order Status</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --bg:#f2f2f7; --card:#ffffff; --separator:rgba(60,60,67,0.12); --separator2:rgba(60,60,67,0.06);
+  --label:#000000; --label2:rgba(60,60,67,0.6); --label3:rgba(60,60,67,0.3);
+  --blue:#007AFF; --blue-light:rgba(0,122,255,0.12);
+  --green:#34C759; --green-light:rgba(52,199,89,0.12);
+  --red:#FF3B30; --red-light:rgba(255,59,48,0.12);
+  --orange:#FF9500; --orange-light:rgba(255,149,0,0.12);
+  --radius-sm:10px; --radius:13px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg)}
+body{font-family:var(--font);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+/* HEADER */
+.board-hdr{background:rgba(242,242,247,0.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--separator);flex-shrink:0}
+.board-logo{display:flex;align-items:center;gap:10px}
+.board-logo-mark{width:36px;height:36px;background:linear-gradient(145deg,#B8860B,#DAA520);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(184,134,11,0.3)}
+.board-title{font-size:20px;font-weight:800;color:var(--label);letter-spacing:-0.5px}
+.board-sub{font-size:11px;color:var(--label2);letter-spacing:0.3px;text-transform:uppercase;margin-top:2px}
+.board-clock{font-size:22px;font-weight:300;color:var(--label);letter-spacing:0.5px;font-variant-numeric:tabular-nums}
+
+/* COLUMN HEADERS */
+.board-col-hdr{display:grid;grid-template-columns:1fr 110px 130px;padding:8px 20px;background:rgba(60,60,67,0.04);border-bottom:0.5px solid var(--separator);flex-shrink:0}
+.board-col-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--label3)}
+
+/* SCROLL AREA */
+.board-scroll{flex:1;overflow-y:auto;padding:8px 0 70px}
+.board-scroll::-webkit-scrollbar{display:none}
+
+/* ROWS */
+.board-row{display:grid;grid-template-columns:1fr 110px 130px;padding:14px 20px;gap:8px;background:var(--card);transition:background .3s;animation:fadeRow .35s cubic-bezier(.34,1.4,.64,1);margin:6px 12px 0;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+@keyframes fadeRow{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.board-row.status-ready{background:#f0fdf4}
+.board-row.status-retrieving{background:#eff6ff}
+
+.board-family{font-size:17px;font-weight:800;color:var(--label);line-height:1.2}
+.board-row.status-ready .board-family{color:var(--green)}
+.board-row.status-retrieving .board-family{color:var(--blue)}
+.board-detail{font-size:12px;color:var(--label2);margin-top:2px}
+.board-countdown{font-size:10px;font-weight:700;color:var(--green);opacity:0.7;margin-top:3px}
+
+.board-sizes{display:flex;align-items:center;justify-content:center}
+.board-sz{font-size:13px;font-weight:600;color:var(--label2);text-align:center}
+
+.board-status-col{display:flex;align-items:center;justify-content:center}
+.board-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;width:100%;justify-content:center}
+.board-badge.requested{background:var(--orange-light);color:var(--orange)}
+.board-badge.retrieving{background:var(--blue-light);color:var(--blue);animation:blinkBadge 2s ease-in-out infinite}
+.board-badge.ready{background:var(--green-light);color:var(--green)}
+@keyframes blinkBadge{0%,100%{opacity:1}50%{opacity:.5}}
+
+.board-empty-wrap{text-align:center;padding:80px 20px}
+.board-empty-ico{font-size:48px;margin-bottom:12px;opacity:.3}
+.board-empty-txt{font-size:17px;font-weight:600;color:var(--label3)}
+
+/* TICKER */
+.board-ticker{position:fixed;bottom:0;left:0;right:0;background:rgba(242,242,247,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:0.5px solid var(--separator);padding:9px 0;overflow:hidden;z-index:50;flex-shrink:0}
+.ticker-track{display:flex;gap:60px;animation:scrollTicker 35s linear infinite;white-space:nowrap}
+.ticker-item{font-size:12px;color:var(--label2);letter-spacing:0.3px;flex-shrink:0}
+.ticker-item span{color:var(--blue);font-weight:600}
+@keyframes scrollTicker{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+</style>
+</head>
+<body>
+
+<div class="board-hdr">
+  <div class="board-logo">
+    <div class="board-logo-mark">AU</div>
+    <div>
+      <div class="board-title">Order Status</div>
+      <div class="board-sub">Anton Uniforms · Tempe, AZ</div>
+    </div>
+  </div>
+  <div class="board-clock" id="board-clock">--:--</div>
+</div>
+
+<div class="board-col-hdr">
+  <div class="board-col-lbl">Family / Item</div>
+  <div class="board-col-lbl" style="text-align:center">Sizes</div>
+  <div class="board-col-lbl" style="text-align:center">Status</div>
+</div>
+
+<div class="board-scroll">
+  <div id="board-rows">
+    <div class="board-empty-wrap">
+      <div class="board-empty-ico">🏫</div>
+      <div class="board-empty-txt">No Active Orders</div>
+    </div>
+  </div>
+</div>
+
+<div class="board-ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">Welcome to <span>Anton Uniforms</span> — Arizona's school uniform specialist</div>
+    <div class="ticker-item">Your associate will bring items once status shows <span>Ready ✓</span></div>
+    <div class="ticker-item">Questions? Ask any team member on the floor</div>
+    <div class="ticker-item">Serving <span>60+ schools</span> across greater Phoenix</div>
+    <div class="ticker-item">Shop online at <span>antonuniforms.com</span></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC6zm-642fbrpKRknIhJkTUm1esUsXDTHQ",
+  authDomain:"anton-uniforms.firebaseapp.com",
+  databaseURL:"https://anton-uniforms-default-rtdb.firebaseio.com",
+  projectId:"anton-uniforms",
+  storageBucket:"anton-uniforms.firebasestorage.app",
+  messagingSenderId:"539546407658",
+  appId:"1:539546407658:web:1b76e5334f7f87e6103d93"
+});
+const db=getDatabase(app), auth=getAuth(app);
+const reqRef=ref(db,'requests');
+signInAnonymously(auth).catch(()=>{});
+
+const READY_EXPIRE_MS = 5 * 60 * 1000;
+let liveRequests={};
+
+// Clock
+function updateClock(){ document.getElementById('board-clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+setInterval(()=>{ updateClock(); renderBoard(); }, 1000);
+updateClock();
+
+onValue(reqRef,(snap)=>{ liveRequests=snap.val()||{}; renderBoard(); });
+
+function getSorted(){ return Object.entries(liveRequests).map(([key,val])=>({key,...val})).sort((a,b)=>{ if(a.urgency==='urgent'&&b.urgency!=='urgent')return -1; if(b.urgency==='urgent'&&a.urgency!=='urgent')return 1; return (a.timestamp||0)-(b.timestamp||0); }); }
+
+function renderBoard(){
+  const board=document.getElementById('board-rows');
+  const all=getSorted();
+  const now=Date.now();
+
+  // Auto-remove ready orders after 5 min
+  all.forEach(r=>{ if(r.status==='ready'&&r.completedAt&&(now-r.completedAt)>=READY_EXPIRE_MS){ remove(ref(db,'requests/'+r.key)).catch(()=>{}); } });
+
+  const visible=all.filter(r=>!(r.status==='ready'&&r.completedAt&&(now-r.completedAt)>=READY_EXPIRE_MS));
+
+  if(visible.length===0){ board.innerHTML='<div class="board-empty-wrap"><div class="board-empty-ico">🏫</div><div class="board-empty-txt">No Active Orders</div></div>'; return; }
+
+  const sorted=[...visible].sort((a,b)=>{ const o={ready:0,retrieving:1,requested:2}; if(o[a.status]!==o[b.status])return o[a.status]-o[b.status]; if(a.urgency==='urgent'&&b.urgency!=='urgent')return -1; return (a.timestamp||0)-(b.timestamp||0); });
+
+  const statusLabel={requested:'Requested',retrieving:'On the Way',ready:'Ready'};
+  const statusIcon={requested:'⏳',retrieving:'↗',ready:'✓'};
+
+  board.innerHTML=sorted.map(r=>{
+    const items=r.items||[];
+    const allSizes=[...new Set(items.flatMap(i=>i.sizes||[]))];
+    const sizesDisplay=allSizes.slice(0,4).join(' · ')+(allSizes.length>4?'…':'');
+    const firstSchool=items[0]?items[0].school:'—';
+    const itemSummary=items.length===1?items[0].itemType+(items[0].color?' · '+items[0].color:''):items.length+' items';
+    const familyLabel=r.familyName?esc(r.familyName):'';
+    let countdownHtml='';
+    if(r.status==='ready'&&r.completedAt){ const mLeft=Math.max(0,Math.ceil((READY_EXPIRE_MS-(now-r.completedAt))/60000)); countdownHtml=`<div class="board-countdown">Removing in ~${mLeft} min</div>`; }
+    return `<div class="board-row status-${r.status}">
+      <div>
+        <div class="board-family">${familyLabel||esc(firstSchool)}</div>
+        <div class="board-detail">${familyLabel?esc(firstSchool)+' · ':''} ${esc(itemSummary)}</div>
+        ${countdownHtml}
+      </div>
+      <div class="board-sizes"><div class="board-sz">${esc(sizesDisplay)}</div></div>
+      <div class="board-status-col"><div class="board-badge ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anton Uniforms — Warehouse</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --bg:#f2f2f7; --card:#ffffff; --separator:rgba(60,60,67,0.12); --separator2:rgba(60,60,67,0.06);
+  --label:#000000; --label2:rgba(60,60,67,0.6); --label3:rgba(60,60,67,0.3);
+  --blue:#007AFF; --blue-light:rgba(0,122,255,0.12);
+  --green:#34C759; --green-light:rgba(52,199,89,0.12);
+  --red:#FF3B30; --red-light:rgba(255,59,48,0.12);
+  --orange:#FF9500; --orange-light:rgba(255,149,0,0.12);
+  --indigo:#5856D6; --teal:#30B0C7;
+  --radius-sm:10px; --radius:13px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--label);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--separator);padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(145deg,#B8860B,#DAA520);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(184,134,11,0.35)}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-size:15px;font-weight:700;color:var(--label);letter-spacing:-0.3px;line-height:1.2}
+.logo-sub{font-size:11px;font-weight:500;color:var(--label2)}
+.header-right{display:flex;align-items:center;gap:8px}
+.conn-status{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;transition:all .3s}
+.conn-status.online{color:var(--green);background:var(--green-light)}
+.conn-status.offline{color:var(--red);background:var(--red-light)}
+.conn-status.connecting{color:var(--orange);background:var(--orange-light)}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.conn-dot.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.35)}}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--green);background:var(--green-light);padding:4px 10px;border-radius:20px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.8s ease-in-out infinite}
+
+.queue-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 0}
+.page-title{font-size:28px;font-weight:800;color:var(--label);letter-spacing:-0.6px}
+.page-sub{font-size:14px;color:var(--label2);margin-top:3px}
+.clear-pill{background:var(--red-light);border:none;color:var(--red);border-radius:20px;padding:5px 13px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 16px 0}
+.stat-card{background:var(--card);border-radius:var(--radius-lg);padding:14px 12px;text-align:center;box-shadow:var(--shadow-sm)}
+.stat-num{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--label)}
+.stat-num.blue{color:var(--blue)}
+.stat-num.green{color:var(--green)}
+.stat-label-txt{font-size:11px;font-weight:500;color:var(--label2);margin-top:3px}
+
+.filter-row{display:flex;gap:7px;padding:12px 16px 0;overflow-x:auto}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-pill{flex-shrink:0;padding:6px 14px;border-radius:20px;background:var(--card);border:none;color:var(--label2);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-sm);white-space:nowrap}
+.filter-pill.active{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(0,122,255,0.25)}
+
+/* Request Cards */
+.req-card{background:var(--card);border-radius:var(--radius-xl);margin:12px 16px 0;box-shadow:var(--shadow);overflow:hidden;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
+@keyframes springIn{from{opacity:0;transform:scale(0.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.req-card-accent{height:4px}
+.req-card-accent.requested{background:linear-gradient(90deg,var(--orange),#FFCC00)}
+.req-card-accent.retrieving{background:linear-gradient(90deg,var(--blue),var(--indigo))}
+.req-card-accent.ready{background:linear-gradient(90deg,var(--green),var(--teal))}
+.req-card-accent.urgent{background:linear-gradient(90deg,var(--red),var(--orange))}
+.req-card-body{padding:14px 16px}
+.req-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.req-order-label{font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--label2);margin-bottom:3px}
+.req-family{font-size:17px;font-weight:800;color:var(--label);letter-spacing:-0.3px}
+.req-card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.status-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.status-chip.requested{background:var(--orange-light);color:var(--orange)}
+.status-chip.retrieving{background:var(--blue-light);color:var(--blue)}
+.status-chip.ready{background:var(--green-light);color:var(--green)}
+.urgent-chip{display:inline-flex;align-items:center;gap:3px;background:var(--red-light);color:var(--red);padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700}
+
+.item-list{display:flex;flex-direction:column;border-radius:var(--radius-sm);overflow:hidden;background:var(--bg);margin-bottom:10px}
+.item-row{display:flex;align-items:center;padding:10px 12px;gap:10px;border-bottom:0.5px solid var(--separator2)}
+.item-row:last-child{border-bottom:none}
+.item-row-icon{width:30px;height:30px;border-radius:8px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.item-row-info{flex:1}
+.item-row-name{font-size:14px;font-weight:600;color:var(--label);line-height:1.2}
+.item-row-school{font-size:12px;color:var(--label2);margin-top:1px}
+.item-row-chips{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:130px}
+.sz-chip{background:var(--card);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--label);box-shadow:var(--shadow-sm)}
+.q-chip{background:var(--blue-light);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--blue)}
+
+.claimed-pill{display:inline-flex;align-items:center;gap:4px;background:var(--blue-light);color:var(--blue);padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600;margin-top:6px}
+.timer-row{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:20px;font-variant-numeric:tabular-nums;margin-top:6px}
+.timer-row.fast{background:var(--green-light);color:var(--green)}
+.timer-row.medium{background:var(--orange-light);color:var(--orange)}
+.timer-row.slow{background:var(--red-light);color:var(--red)}
+.timer-row.done{background:var(--green-light);color:var(--green)}
+.req-card-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:6px;border-top:0.5px solid var(--separator2);margin-top:6px}
+.footer-pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--label2);font-weight:500}
+
+.action-group{display:grid;gap:8px;margin-top:12px}
+.action-group.two{grid-template-columns:1fr 1fr}
+.act-btn{border-radius:var(--radius-sm);padding:11px 10px;font-family:var(--font);font-weight:600;font-size:14px;cursor:pointer;text-align:center;border:none;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.act-btn:active{transform:scale(0.97)}
+.act-claim{background:var(--blue-light);color:var(--blue)}
+.act-ready{background:var(--green-light);color:var(--green)}
+.act-done{background:var(--bg);color:var(--label2)}
+.act-unclaim{background:var(--red-light);color:var(--red);font-size:13px}
+.claim-expand{margin-top:10px}
+.claim-input{width:100%;background:var(--bg);border:none;outline:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:15px;color:var(--label);padding:11px 14px;margin-bottom:8px;-webkit-appearance:none}
+.claim-input::placeholder{color:var(--label3)}
+/* SP BAR */
+.sp-bar{display:flex;align-items:center;background:var(--card);border-radius:var(--radius-lg);padding:13px 16px;box-shadow:var(--shadow-sm);gap:12px;margin:12px 16px 0}
+.sp-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,#FF9500,#FF6B00);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;text-transform:uppercase}
+.sp-info{flex:1;min-width:0}
+.sp-name{font-size:15px;font-weight:700;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-hint{font-size:12px;color:var(--label2);margin-top:1px}
+.sp-change-btn{background:var(--bg);border:none;border-radius:20px;padding:6px 14px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;flex-shrink:0;white-space:nowrap}
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;animation:fadeBackdrop .2s ease}
+@keyframes fadeBackdrop{from{opacity:0}to{opacity:1}}
+.modal-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:12px 24px 48px;width:100%;animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--separator);border-radius:2px;margin:0 auto 22px}
+.modal-title{font-size:24px;font-weight:800;color:var(--label);letter-spacing:-0.5px;margin-bottom:6px}
+.modal-sub{font-size:15px;color:var(--label2);margin-bottom:24px;line-height:1.5}
+.modal-input{width:100%;background:var(--bg);border:none;outline:none;border-radius:var(--radius-lg);font-family:var(--font);font-size:18px;font-weight:500;color:var(--label);padding:16px 18px;margin-bottom:14px;-webkit-appearance:none}
+.modal-input::placeholder{color:var(--label3)}
+.modal-confirm-btn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(255,149,0,0.3)}
+.modal-confirm-btn:active{transform:scale(0.98)}
+/* BIN PICKER SHEET */
+.bin-sheet-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;animation:fadeBackdrop .2s ease}
+.bin-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:12px 24px 48px;width:100%;animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1)}
+.bin-sheet-handle{width:36px;height:4px;background:var(--separator);border-radius:2px;margin:0 auto 20px}
+.bin-sheet-title{font-size:22px;font-weight:800;color:var(--label);letter-spacing:-0.5px;margin-bottom:4px}
+.bin-sheet-sub{font-size:14px;color:var(--label2);margin-bottom:20px;line-height:1.4}
+.bin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.bin-btn{background:var(--bg);border:1.5px solid var(--separator);border-radius:var(--radius-lg);padding:18px 8px;cursor:pointer;font-family:var(--font);font-weight:800;font-size:22px;color:var(--label);text-align:center;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bin-btn:active{transform:scale(0.94)}
+.bin-btn.selected{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.bin-label{font-size:10px;font-weight:600;color:var(--label3);letter-spacing:0.5px;text-transform:uppercase}
+.bin-confirm-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(52,199,89,0.3)}
+.bin-confirm-btn:active{transform:scale(0.98)}
+.bin-confirm-btn:disabled{opacity:.4;cursor:default}
+/* Bin badge on ready cards */
+.bin-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-light);color:var(--green);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:800;margin-top:6px;letter-spacing:-0.3px}
+
+.spinner-wrap{text-align:center;padding:60px 20px}
+.spinner{width:32px;height:32px;border:3px solid var(--separator);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-txt{font-size:14px;color:var(--label2);font-weight:500}
+
+.empty-wrap{text-align:center;padding:60px 24px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty-glyph{width:64px;height:64px;border-radius:16px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px}
+.empty-title{font-size:17px;font-weight:600;color:var(--label)}
+.empty-body{font-size:14px;color:var(--label2);max-width:220px;line-height:1.4}
+
+.toast{position:fixed;bottom:34px;left:50%;transform:translateX(-50%) translateY(80px) scale(0.95);background:rgba(50,50,50,0.92);backdrop-filter:blur(12px);color:#fff;padding:12px 22px;border-radius:22px;font-weight:600;font-size:14px;z-index:999;transition:transform .35s cubic-bezier(.34,1.4,.64,1),opacity .25s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.25);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0) scale(1);opacity:1}
+.toast.error{background:rgba(255,59,48,0.92)}
+.pb80{padding-bottom:80px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-mark">AU</div>
+    <div class="logo-text">
+      <div class="logo-name">Anton Uniforms</div>
+      <div class="logo-sub">Warehouse</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="conn-status connecting" id="conn-status">
+      <div class="conn-dot pulse"></div>
+      <span id="conn-text">Connecting</span>
+    </div>
+  </div>
+</header>
+
+<!-- Warehouse person bar -->
+<div class="sp-bar" id="sp-bar">
+  <div class="sp-avatar" id="sp-avatar">?</div>
+  <div class="sp-info">
+    <div class="sp-name" id="sp-name-display">Loading…</div>
+    <div class="sp-hint">Orders you claim are tagged to you</div>
+  </div>
+  <button class="sp-change-btn" onclick="promptName(true)">Not you?</button>
+</div>
+
+<div class="queue-hdr">
+  <div>
+    <div class="page-title">Queue</div>
+    <div class="page-sub">Claim orders to prevent double-picks</div>
+  </div>
+  <button class="clear-pill" onclick="clearAll()">Clear All</button>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label-txt">Total</div></div>
+  <div class="stat-card"><div class="stat-num blue" id="stat-retrieving">0</div><div class="stat-label-txt">Picking</div></div>
+  <div class="stat-card"><div class="stat-num green" id="stat-ready">0</div><div class="stat-label-txt">Ready</div></div>
+</div>
+
+<div class="filter-row">
+  <button class="filter-pill active" onclick="setFilter('all',this)">All</button>
+  <button class="filter-pill" onclick="setFilter('requested',this)">New</button>
+  <button class="filter-pill" onclick="setFilter('retrieving',this)">Picking</button>
+  <button class="filter-pill" onclick="setFilter('ready',this)">Ready</button>
+</div>
+
+<div id="queue-list" class="pb80">
+  <div class="spinner-wrap"><div class="spinner"></div><div class="spinner-txt">Connecting…</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Bin Picker Sheet -->
+<div class="bin-sheet-backdrop" id="bin-modal" style="display:none">
+  <div class="bin-sheet">
+    <div class="bin-sheet-handle"></div>
+    <div class="bin-sheet-title">Which bin?</div>
+    <div class="bin-sheet-sub" id="bin-sheet-sub">Place the order in a bin and tap to confirm.</div>
+    <div class="bin-grid">
+      <button class="bin-btn" onclick="selectBin(1,this)"><span>1</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(2,this)"><span>2</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(3,this)"><span>3</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(4,this)"><span>4</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(5,this)"><span>5</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(6,this)"><span>6</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(7,this)"><span>7</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(8,this)"><span>8</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(9,this)"><span>9</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(10,this)"><span>10</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(11,this)"><span>11</span><span class="bin-label">Bin</span></button>
+      <button class="bin-btn" onclick="selectBin(12,this)"><span>12</span><span class="bin-label">Bin</span></button>
+    </div>
+    <button class="bin-confirm-btn" id="bin-confirm-btn" onclick="confirmBin()" disabled>Select a Bin</button>
+  </div>
+</div>
+
+<!-- Name Modal -->
+<div class="modal-backdrop" id="name-modal" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Who are you?</div>
+    <div class="modal-sub">Enter your name once — it stays set all session and auto-fills when you claim orders.</div>
+    <input class="modal-input" type="text" id="modal-name-input" placeholder="Your name…" autocomplete="off" maxlength="40">
+    <button class="modal-confirm-btn" onclick="confirmName()">Start Picking</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC6zm-642fbrpKRknIhJkTUm1esUsXDTHQ",
+  authDomain:"anton-uniforms.firebaseapp.com",
+  databaseURL:"https://anton-uniforms-default-rtdb.firebaseio.com",
+  projectId:"anton-uniforms",
+  storageBucket:"anton-uniforms.firebasestorage.app",
+  messagingSenderId:"539546407658",
+  appId:"1:539546407658:web:1b76e5334f7f87e6103d93"
+});
+const db=getDatabase(app), auth=getAuth(app);
+const reqRef=ref(db,'requests'), logRef=ref(db,'completedLog');
+
+const connEl=document.getElementById('conn-status'), connText=document.getElementById('conn-text');
+function setConn(s){ connEl.className='conn-status '+s; connEl.querySelector('.conn-dot').className='conn-dot'+(s==='connecting'?' pulse':''); connText.textContent=s==='online'?'Live':s==='offline'?'Offline':'Connecting'; }
+signInAnonymously(auth).catch(()=>setConn('offline'));
+
+// Session name
+let sessionName = sessionStorage.getItem('anton_wh_name')||'';
+function initName(){ if(!sessionName){ promptName(false); } else { renderSpBar(); } }
+function renderSpBar(){ const i=sessionName.split(' ').map(w=>w[0]).slice(0,2).join(''); document.getElementById('sp-avatar').textContent=i||'?'; document.getElementById('sp-name-display').textContent=sessionName; }
+window.promptName=(allowDismiss)=>{ const m=document.getElementById('name-modal'),inp=document.getElementById('modal-name-input'); m.style.display='flex'; inp.value=sessionName||''; setTimeout(()=>inp.focus(),350); m.onclick=(e)=>{ if(allowDismiss&&e.target===m) m.style.display='none'; }; };
+window.confirmName=()=>{ const v=document.getElementById('modal-name-input').value.trim(); if(!v){ document.getElementById('modal-name-input').focus(); return; } sessionName=v; sessionStorage.setItem('anton_wh_name',v); renderSpBar(); document.getElementById('name-modal').style.display='none'; };
+document.getElementById('modal-name-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.confirmName(); });
+initName();
+
+let liveRequests={}, activeFilter='all';
+
+onValue(reqRef,(snap)=>{ setConn('online'); liveRequests=snap.val()||{}; renderQueue(); },()=>setConn('offline'));
+setInterval(updateLiveTimers, 1000);
+
+window.setFilter=(f,btn)=>{ activeFilter=f; document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderQueue(); };
+
+function getSorted(){ return Object.entries(liveRequests).map(([key,val])=>({key,...val})).sort((a,b)=>{ if(a.urgency==='urgent'&&b.urgency!=='urgent')return -1; if(b.urgency==='urgent'&&a.urgency!=='urgent')return 1; return (a.timestamp||0)-(b.timestamp||0); }); }
+function elapsedStr(ms){ const s=Math.floor((Date.now()-ms)/1000),m=Math.floor(s/60),ss=s%60; return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`; }
+function timerCls(ms){ const m=(Date.now()-ms)/60000; return m<3?'fast':m<7?'medium':'slow'; }
+function fmtDur(ms){ const s=Math.round(ms/1000),m=Math.floor(s/60),ss=s%60; return `${m}m ${ss}s`; }
+
+function renderQueue(){
+  const list=document.getElementById('queue-list');
+  const all=getSorted();
+  const filtered=activeFilter==='all'?all:all.filter(r=>r.status===activeFilter);
+  document.getElementById('stat-total').textContent=all.length;
+  document.getElementById('stat-retrieving').textContent=all.filter(r=>r.status==='retrieving').length;
+  document.getElementById('stat-ready').textContent=all.filter(r=>r.status==='ready').length;
+  if(filtered.length===0){ list.innerHTML=`<div class="empty-wrap"><div class="empty-glyph">📦</div><div class="empty-title">${activeFilter==='all'?'No requests yet':'Nothing here'}</div><div class="empty-body">Requests from the sales floor appear instantly</div></div>`; return; }
+  const statusLabel={requested:'Requested',retrieving:'Picking',ready:'Ready'};
+  const statusIcon={requested:'⏳',retrieving:'↗',ready:'✓'};
+  list.innerHTML=filtered.map(r=>{
+    const items=r.items||[], isUrgent=r.urgency==='urgent', accentClass=isUrgent?'urgent':r.status;
+    let timerHtml='';
+    if(r.status==='requested'||r.status==='retrieving'){ const cls=timerCls(r.submittedAt||r.timestamp||Date.now()); timerHtml=`<div class="timer-row ${cls}" id="timer-${r.key}">⏱ ${elapsedStr(r.submittedAt||r.timestamp||Date.now())}</div>`; }
+    else if(r.status==='ready'&&r.completedAt&&r.submittedAt){ timerHtml=`<div class="timer-row done">✓ Picked in ${fmtDur(r.completedAt-r.submittedAt)}</div>`; }
+    const itemsHtml=items.map(item=>`<div class="item-row"><div class="item-row-icon">👕</div><div class="item-row-info"><div class="item-row-name">${esc(item.itemType)}${item.color?' — '+esc(item.color):''}</div><div class="item-row-school">${esc(item.school)}</div></div><div class="item-row-chips">${item.sizes.map(s=>`<span class="sz-chip">${esc(s)}</span>`).join('')}<span class="q-chip">×${item.qty}</span></div></div>`).join('');
+    let actionHtml='';
+    if(r.status==='requested'){ actionHtml=`<div class="action-group"><button class="act-btn act-claim" onclick="claimOrder('${r.key}')">🙋 Claim This Order</button></div>`; }
+    else if(r.status==='retrieving'){ actionHtml=`<div class="action-group two"><button class="act-btn act-ready" onclick="showBinPicker('${r.key}')">✓ Mark Ready</button><button class="act-btn act-unclaim" onclick="unclaimOrder('${r.key}')">✕ Unclaim</button></div>`; }
+    else if(r.status==='ready'){ const binHtml=r.binNumber?`<div class="bin-badge">📦 Bin ${esc(String(r.binNumber))}</div>`:''; actionHtml=`${binHtml}<div class="action-group" style="margin-top:10px"><button class="act-btn act-done" onclick="markDone('${r.key}')">✓ Delivered — Remove</button></div>`; }
+    return `<div class="req-card"><div class="req-card-accent ${accentClass}"></div><div class="req-card-body"><div class="req-card-top"><div><div class="req-order-label">${items.length} item${items.length!==1?'s':''} · ${esc(r.salesperson||'')}</div>${r.familyName?`<div class="req-family">${esc(r.familyName)}</div>`:''}</div><div class="req-card-badges"><span class="status-chip ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</span>${isUrgent?'<span class="urgent-chip">⚡ Urgent</span>':''}</div></div><div class="item-list">${itemsHtml}</div>${r.claimedBy?`<div class="claimed-pill">🙋 ${esc(r.claimedBy)} is picking</div>`:''} ${timerHtml}<div class="req-card-footer"><span class="footer-pill">🕐 ${r.time||''}</span></div>${actionHtml}</div></div>`;
+  }).join('');
+}
+
+function updateLiveTimers(){ Object.entries(liveRequests).forEach(([key,r])=>{ if(r.status==='requested'||r.status==='retrieving'){ const el=document.getElementById('timer-'+key); if(el){ el.textContent='⏱ '+elapsedStr(r.submittedAt||r.timestamp||Date.now()); el.className='timer-row '+timerCls(r.submittedAt||r.timestamp||Date.now()); } } }); }
+
+
+
+window.claimOrder=async(key)=>{
+  if(!sessionName){ promptName(false); return; }
+  try{ await update(ref(db,'requests/'+key),{status:'retrieving',claimedBy:sessionName,claimedAt:Date.now()}); }
+  catch(e){ toast('Could not claim',true); }
+};
+window.unclaimOrder=async(key)=>{ if(!confirm('Release this order back to the queue?'))return; try{await update(ref(db,'requests/'+key),{status:'requested',claimedBy:'',claimedAt:null});}catch(e){toast('Could not unclaim',true);} };
+let pendingReadyKey=null, selectedBin=null;
+
+window.showBinPicker=(key)=>{
+  pendingReadyKey=key; selectedBin=null;
+  const r=liveRequests[key];
+  const modal=document.getElementById('bin-modal');
+  // Update subtitle with family/order info
+  const label=r&&r.familyName?r.familyName:(r&&r.items&&r.items[0]?r.items[0].school:'this order');
+  document.getElementById('bin-sheet-sub').textContent=`Place ${esc(label)}'s order in a bin, then tap to confirm.`;
+  // Reset bin buttons
+  document.querySelectorAll('.bin-btn').forEach(b=>b.classList.remove('selected'));
+  const confirmBtn=document.getElementById('bin-confirm-btn');
+  confirmBtn.disabled=true; confirmBtn.textContent='Select a Bin';
+  modal.style.display='flex';
+  modal.onclick=(e)=>{ if(e.target===modal) closeBinModal(); };
+};
+function closeBinModal(){ document.getElementById('bin-modal').style.display='none'; pendingReadyKey=null; selectedBin=null; }
+window.selectBin=(num,btn)=>{
+  selectedBin=num;
+  document.querySelectorAll('.bin-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const confirmBtn=document.getElementById('bin-confirm-btn');
+  confirmBtn.disabled=false; confirmBtn.textContent=`Confirm — Bin ${num}`;
+};
+window.confirmBin=async()=>{
+  if(!pendingReadyKey||!selectedBin) return;
+  const key=pendingReadyKey, bin=selectedBin;
+  closeBinModal();
+  const r=liveRequests[key]; if(!r)return;
+  const now=Date.now(), duration=now-(r.submittedAt||r.timestamp||now);
+  try{
+    await update(ref(db,'requests/'+key),{status:'ready',completedAt:now,binNumber:bin});
+    await push(logRef,{school:(r.items&&r.items[0]?r.items[0].school:''),itemCount:(r.items||[]).length,items:r.items||[],familyName:r.familyName||'',salesperson:r.salesperson||'',pickedBy:r.claimedBy||'Unknown',submittedAt:r.submittedAt||r.timestamp||now,completedAt:now,durationMs:duration,urgency:r.urgency||'normal',time:r.time||'',binNumber:bin});
+    toast(`✓ Ready · Bin ${bin}`);
+  }catch(e){toast('Could not update',true);}
+};
+window.markDone=async(key)=>{ try{await remove(ref(db,'requests/'+key));}catch(e){toast('Could not remove',true);} };
+window.clearAll=async()=>{ if(!confirm('Clear ALL requests from the queue?'))return; try{await remove(reqRef);}catch(e){toast('Could not clear',true);} };
+
+function toast(msg,isError){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(isError?' error':''); setTimeout(()=>t.className='toast'+(isError?' error':''),2800); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>

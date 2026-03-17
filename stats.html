@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anton Uniforms — Stats</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --bg:#f2f2f7; --card:#ffffff; --separator:rgba(60,60,67,0.12); --separator2:rgba(60,60,67,0.06);
+  --label:#000000; --label2:rgba(60,60,67,0.6); --label3:rgba(60,60,67,0.3);
+  --blue:#007AFF; --blue-light:rgba(0,122,255,0.12);
+  --green:#34C759; --green-light:rgba(52,199,89,0.12);
+  --red:#FF3B30; --red-light:rgba(255,59,48,0.12);
+  --orange:#FF9500; --orange-light:rgba(255,149,0,0.12);
+  --radius-sm:10px; --radius:13px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--label);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--separator);padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(145deg,#B8860B,#DAA520);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(184,134,11,0.35)}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-size:15px;font-weight:700;color:var(--label);letter-spacing:-0.3px;line-height:1.2}
+.logo-sub{font-size:11px;font-weight:500;color:var(--label2)}
+.conn-status{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.conn-status.online{color:var(--green);background:var(--green-light)}
+.conn-status.offline{color:var(--red);background:var(--red-light)}
+.conn-status.connecting{color:var(--orange);background:var(--orange-light)}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.conn-dot.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.page{padding:0 0 80px}
+.page-header{padding:20px 20px 4px}
+.page-title{font-size:28px;font-weight:800;color:var(--label);letter-spacing:-0.6px}
+.page-sub{font-size:14px;color:var(--label2);margin-top:3px}
+
+.tab-seg{display:flex;background:rgba(118,118,128,0.12);border-radius:var(--radius-sm);padding:2px;gap:0;margin:16px 16px 0}
+.tab-seg-btn{flex:1;padding:7px 10px;border:none;background:transparent;font-family:var(--font);font-size:13px;font-weight:600;color:var(--label2);cursor:pointer;border-radius:8px;transition:all .2s}
+.tab-seg-btn.active{background:var(--card);color:var(--label);box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+
+.lb-card{background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden;margin:12px 16px 0}
+.lb-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:0.5px solid var(--separator2)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.rank-1{background:#FFF7DC;color:#B8860B}
+.rank-2{background:#F5F5F5;color:#888}
+.rank-3{background:#FFF0E8;color:#B87333}
+.rank-n{background:var(--bg);color:var(--label2);font-size:13px}
+.lb-info{flex:1}
+.lb-name{font-size:16px;font-weight:700;color:var(--label)}
+.lb-sub{font-size:12px;color:var(--label2);margin-top:2px}
+.lb-time-col{text-align:right}
+.lb-avg{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.lb-avg.fast{color:var(--green)}
+.lb-avg.medium{color:var(--orange)}
+.lb-avg.slow{color:var(--red)}
+.lb-avg-label{font-size:11px;color:var(--label2);margin-top:1px}
+
+.log-card{background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden;margin:12px 16px 0}
+.log-row{display:flex;align-items:center;padding:12px 16px;gap:12px;border-bottom:0.5px solid var(--separator2)}
+.log-row:last-child{border-bottom:none}
+.log-icon{width:34px;height:34px;border-radius:9px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.log-info{flex:1}
+.log-school{font-size:14px;font-weight:600;color:var(--label)}
+.log-meta{font-size:12px;color:var(--label2);margin-top:2px}
+.log-time-col{text-align:right}
+.log-time{font-size:15px;font-weight:700;color:var(--green)}
+.log-picker{font-size:11px;color:var(--blue);margin-top:2px}
+
+.empty-wrap{text-align:center;padding:60px 24px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty-glyph{width:64px;height:64px;border-radius:16px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px}
+.empty-title{font-size:17px;font-weight:600;color:var(--label)}
+.empty-body{font-size:14px;color:var(--label2);max-width:220px;line-height:1.4}
+
+.danger-btn{width:100%;background:var(--card);border:none;border-radius:var(--radius-lg);padding:14px;font-family:var(--font);font-size:15px;font-weight:600;color:var(--red);cursor:pointer;box-shadow:var(--shadow-sm)}
+.danger-btn:active{background:var(--red-light)}
+.ios-section{margin:20px 16px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-mark">AU</div>
+    <div class="logo-text">
+      <div class="logo-name">Anton Uniforms</div>
+      <div class="logo-sub">Management</div>
+    </div>
+  </div>
+  <div class="conn-status connecting" id="conn-status">
+    <div class="conn-dot pulse"></div>
+    <span id="conn-text">Connecting</span>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Performance</div>
+    <div class="page-sub">Picker speed and order history</div>
+  </div>
+
+  <div class="tab-seg">
+    <button class="tab-seg-btn active" id="lb-tab-btn" onclick="showTab('leaderboard')">🏆 Leaderboard</button>
+    <button class="tab-seg-btn" id="log-tab-btn" onclick="showTab('log')">📋 Order Log</button>
+  </div>
+
+  <div id="pane-leaderboard"><div id="lb-rows"></div></div>
+  <div id="pane-log" style="display:none">
+    <div class="log-card" id="log-rows"></div>
+    <div class="ios-section" style="margin-bottom:12px">
+      <button class="danger-btn" onclick="clearLog()">Clear Order Log</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC6zm-642fbrpKRknIhJkTUm1esUsXDTHQ",
+  authDomain:"anton-uniforms.firebaseapp.com",
+  databaseURL:"https://anton-uniforms-default-rtdb.firebaseio.com",
+  projectId:"anton-uniforms",
+  storageBucket:"anton-uniforms.firebasestorage.app",
+  messagingSenderId:"539546407658",
+  appId:"1:539546407658:web:1b76e5334f7f87e6103d93"
+});
+const db=getDatabase(app), auth=getAuth(app);
+const logRef=ref(db,'completedLog');
+
+const connEl=document.getElementById('conn-status'), connText=document.getElementById('conn-text');
+function setConn(s){ connEl.className='conn-status '+s; connEl.querySelector('.conn-dot').className='conn-dot'+(s==='connecting'?' pulse':''); connText.textContent=s==='online'?'Live':s==='offline'?'Offline':'Connecting'; }
+signInAnonymously(auth).catch(()=>setConn('offline'));
+
+let completedLog=[], currentTab='leaderboard';
+
+onValue(logRef,(snap)=>{ setConn('online'); const val=snap.val()||{}; completedLog=Object.values(val).sort((a,b)=>(b.completedAt||0)-(a.completedAt||0)); renderAll(); },()=>setConn('offline'));
+
+window.showTab=(tab)=>{ currentTab=tab; document.getElementById('lb-tab-btn').classList.toggle('active',tab==='leaderboard'); document.getElementById('log-tab-btn').classList.toggle('active',tab==='log'); document.getElementById('pane-leaderboard').style.display=tab==='leaderboard'?'block':'none'; document.getElementById('pane-log').style.display=tab==='log'?'block':'none'; };
+
+function renderAll(){ renderLeaderboard(); renderLog(); }
+function fmtDur(ms){ const s=Math.round(ms/1000),m=Math.floor(s/60),ss=s%60; return `${m}m ${ss}s`; }
+
+function renderLeaderboard(){
+  const el=document.getElementById('lb-rows');
+  if(completedLog.length===0){ el.innerHTML='<div class="empty-wrap"><div class="empty-glyph">🏆</div><div class="empty-title">No data yet</div><div class="empty-body">Complete orders to see picker performance</div></div>'; return; }
+  const byPicker={};
+  completedLog.forEach(e=>{ const n=e.pickedBy||'Unknown'; if(!byPicker[n]) byPicker[n]={name:n,count:0,totalMs:0,fastest:Infinity}; byPicker[n].count++; byPicker[n].totalMs+=e.durationMs||0; if((e.durationMs||0)<byPicker[n].fastest) byPicker[n].fastest=e.durationMs; });
+  const rows=Object.values(byPicker).sort((a,b)=>a.totalMs/a.count-b.totalMs/b.count);
+  const rankCls=['rank-1','rank-2','rank-3'], rankLbl=['🥇','🥈','🥉'];
+  el.innerHTML='<div class="lb-card">'+rows.map((p,i)=>{ const avg=p.totalMs/p.count, cls=avg<3*60000?'fast':avg<7*60000?'medium':'slow'; return `<div class="lb-row"><div class="lb-rank-badge ${rankCls[i]||'rank-n'}">${rankLbl[i]||i+1}</div><div class="lb-info"><div class="lb-name">${esc(p.name)}</div><div class="lb-sub">${p.count} order${p.count!==1?'s':''} · Best: ${fmtDur(p.fastest)}</div></div><div class="lb-time-col"><div class="lb-avg ${cls}">${fmtDur(avg)}</div><div class="lb-avg-label">avg</div></div></div>`; }).join('')+'</div>';
+}
+
+function renderLog(){
+  const el=document.getElementById('log-rows');
+  if(completedLog.length===0){ el.innerHTML='<div style="text-align:center;padding:30px 20px;color:var(--label2);font-size:14px">No completed orders yet</div>'; return; }
+  el.innerHTML=completedLog.slice(0,100).map(e=>`<div class="log-row"><div class="log-icon">✅</div><div class="log-info"><div class="log-school">${e.familyName?esc(e.familyName)+' · ':''} ${esc(e.school||'—')} · ${e.itemCount||1} item${(e.itemCount||1)!==1?'s':''}</div><div class="log-meta">Sales: ${esc(e.salesperson||'—')} · ${new Date(e.completedAt||Date.now()).toLocaleDateString()}</div></div><div class="log-time-col"><div class="log-time">${fmtDur(e.durationMs||0)}</div><div class="log-picker">${esc(e.pickedBy||'—')}</div></div></div>`).join('');
+}
+
+window.clearLog=async()=>{ if(!confirm('Clear entire log? This cannot be undone.'))return; try{await remove(logRef);}catch(e){} };
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
