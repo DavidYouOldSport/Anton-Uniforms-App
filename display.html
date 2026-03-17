@@ -133,10 +133,25 @@ let liveRequests={};
 
 // Clock
 function updateClock(){ document.getElementById('board-clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
-setInterval(()=>{ updateClock(); renderBoard(); }, 1000);
+
+// Clock ticks every second — board does NOT re-render on every tick
+setInterval(updateClock, 1000);
 updateClock();
 
+// Check for expired ready orders every 30 seconds — not every second
+setInterval(checkExpired, 30000);
+
+// Board only re-renders when Firebase data actually changes
 onValue(reqRef,(snap)=>{ liveRequests=snap.val()||{}; renderBoard(); });
+
+function checkExpired(){
+  const now=Date.now();
+  Object.entries(liveRequests).forEach(([key,r])=>{
+    if(r.status==='ready'&&r.completedAt&&(now-r.completedAt)>=READY_EXPIRE_MS){
+      remove(ref(db,'requests/'+key)).catch(()=>{});
+    }
+  });
+}
 
 function getSorted(){ return Object.entries(liveRequests).map(([key,val])=>({key,...val})).sort((a,b)=>{ if(a.urgency==='urgent'&&b.urgency!=='urgent')return -1; if(b.urgency==='urgent'&&a.urgency!=='urgent')return 1; return (a.timestamp||0)-(b.timestamp||0); }); }
 
@@ -144,10 +159,6 @@ function renderBoard(){
   const board=document.getElementById('board-rows');
   const all=getSorted();
   const now=Date.now();
-
-  // Auto-remove ready orders after 5 min
-  all.forEach(r=>{ if(r.status==='ready'&&r.completedAt&&(now-r.completedAt)>=READY_EXPIRE_MS){ remove(ref(db,'requests/'+r.key)).catch(()=>{}); } });
-
   const visible=all.filter(r=>!(r.status==='ready'&&r.completedAt&&(now-r.completedAt)>=READY_EXPIRE_MS));
 
   if(visible.length===0){ board.innerHTML='<div class="board-empty-wrap"><div class="board-empty-ico">🏫</div><div class="board-empty-txt">No Active Orders</div></div>'; return; }
@@ -164,8 +175,7 @@ function renderBoard(){
     const firstSchool=items[0]?items[0].school:'—';
     const itemSummary=items.length===1?items[0].itemType+(items[0].color?' · '+items[0].color:''):items.length+' items';
     const familyLabel=r.familyName?esc(r.familyName):'';
-    let countdownHtml='';
-    if(r.status==='ready'&&r.completedAt){ const mLeft=Math.max(0,Math.ceil((READY_EXPIRE_MS-(now-r.completedAt))/60000)); countdownHtml=`<div class="board-countdown">Removing in ~${mLeft} min</div>`; }
+    const countdownHtml=''; // Removed — caused per-second re-render flicker
     return `<div class="board-row status-${r.status}">
       <div>
         <div class="board-family">${familyLabel||esc(firstSchool)}</div>
@@ -182,3 +192,4 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 </script>
 </body>
 </html>
+
