@@ -183,7 +183,7 @@ function renderBoard(){
         ${countdownHtml}
       </div>
       <div class="board-sizes"><div class="board-sz">${esc(sizesDisplay)}</div></div>
-      <div class="board-status-col"><div class="board-badge ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</div></div>
+      <div class="board-status-col"><div class="board-badge ${r.status}">${statusIcon[r.status]} ${r.status==='ready'?'Ready'+(r.binNumber?' · Bin '+r.binNumber:''):(r.status==='retrieving'?'On the Way':'Requested')}</div></div>
     </div>`;
   }).join('');
 }
@@ -192,4 +192,3 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 </script>
 </body>
 </html>
-
