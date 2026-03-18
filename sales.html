@@ -149,6 +149,8 @@ select.ios-input option{background:#fff;color:#000}
 
 @keyframes springIn{from{opacity:0;transform:scale(0.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .mt8{margin-top:8px}
+.pickup-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:12px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 2px 8px rgba(52,199,89,0.3)}
+.pickup-btn:active{transform:scale(0.98)}
 
 /* LIVE ORDER TRACKER */
 .live-order-card{background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
@@ -390,7 +392,7 @@ select.ios-input option{background:#fff;color:#000}
 
 <script type="module">
 import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInAnonymously }      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const app = initializeApp({
@@ -542,7 +544,7 @@ function renderMyOrders(){
   const statusIcon={requested:'⏳',retrieving:'↗',ready:'✓'};
   list.innerHTML=orders.map(r=>{
     const itemSummary=r.items&&r.items.length===1?r.items[0].itemType+(r.items[0].color?' · '+r.items[0].color:''):((r.items||[]).length+' items');
-    const binHtml=r.status==='ready'&&r.binNumber?`<div class="bin-callout"><div class="bin-callout-icon">📦</div><div class="bin-callout-text"><div class="bin-callout-label">Pick up from</div><div class="bin-callout-num">Bin ${esc(String(r.binNumber))}</div></div></div>`:'';
+    const binHtml=r.status==='ready'&&r.binNumber?`<div class="bin-callout"><div class="bin-callout-icon">📦</div><div class="bin-callout-text"><div class="bin-callout-label">Pick up from</div><div class="bin-callout-num">Bin ${esc(String(r.binNumber))}</div></div></div><button class="pickup-btn" onclick="markPickedUp('${r.key}')">✓ Picked Up</button>`:'';
     return `<div class="live-order-card">
       <div class="live-order-accent ${r.status}"></div>
       <div class="live-order-body">
@@ -558,6 +560,13 @@ function renderMyOrders(){
     </div>`;
   }).join('');
 }
+
+window.markPickedUp=async(key)=>{
+  try{
+    await remove(ref(db,'requests/'+key));
+    toast('✓ Order picked up');
+  }catch(e){ toast('Could not remove — check connection',true); }
+};
 
 window.submitRequest=async()=>{
   if(!sessionName){promptName(false);return;}
