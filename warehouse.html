@@ -309,7 +309,7 @@ function renderQueue(){
     let actionHtml='';
     if(r.status==='requested'){ actionHtml=`<div class="action-group"><button class="act-btn act-claim" onclick="claimOrder('${r.key}')">🙋 Claim This Order</button></div>`; }
     else if(r.status==='retrieving'){ actionHtml=`<div class="action-group two"><button class="act-btn act-ready" onclick="showBinPicker('${r.key}')">✓ Mark Ready</button><button class="act-btn act-unclaim" onclick="unclaimOrder('${r.key}')">✕ Unclaim</button></div>`; }
-    else if(r.status==='ready'){ const binHtml=r.binNumber?`<div class="bin-badge">📦 Bin ${esc(String(r.binNumber))}</div>`:''; actionHtml=`${binHtml}<div class="action-group" style="margin-top:10px"><button class="act-btn act-done" onclick="markDone('${r.key}')">✓ Delivered — Remove</button></div>`; }
+    else if(r.status==='ready'){ actionHtml=r.binNumber?`<div class="bin-badge">📦 Bin ${esc(String(r.binNumber))}</div>`:''; }
     return `<div class="req-card"><div class="req-card-accent ${accentClass}"></div><div class="req-card-body"><div class="req-card-top"><div><div class="req-order-label">${items.length} item${items.length!==1?'s':''} · ${esc(r.salesperson||'')}</div>${r.familyName?`<div class="req-family">${esc(r.familyName)}</div>`:''}</div><div class="req-card-badges"><span class="status-chip ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</span>${isUrgent?'<span class="urgent-chip">⚡ Urgent</span>':''}</div></div><div class="item-list">${itemsHtml}</div>${r.claimedBy?`<div class="claimed-pill">🙋 ${esc(r.claimedBy)} is picking</div>`:''} ${timerHtml}<div class="req-card-footer"><span class="footer-pill">🕐 ${r.time||''}</span></div>${actionHtml}</div></div>`;
   }).join('');
 }
@@ -360,7 +360,6 @@ window.confirmBin=async()=>{
     toast(`✓ Ready · Bin ${bin}`);
   }catch(e){toast('Could not update',true);}
 };
-window.markDone=async(key)=>{ try{await remove(ref(db,'requests/'+key));}catch(e){toast('Could not remove',true);} };
 window.clearAll=async()=>{ if(!confirm('Clear ALL requests from the queue?'))return; try{await remove(reqRef);}catch(e){toast('Could not clear',true);} };
 
 function toast(msg,isError){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(isError?' error':''); setTimeout(()=>t.className='toast'+(isError?' error':''),2800); }
