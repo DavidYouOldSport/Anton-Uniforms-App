@@ -53,11 +53,13 @@ body{font-family:var(--font);-webkit-font-smoothing:antialiased;display:flex;fle
 .board-sizes{display:flex;align-items:center;justify-content:center}
 .board-sz{font-size:13px;font-weight:600;color:var(--label2);text-align:center}
 
-.board-status-col{display:flex;align-items:center;justify-content:center}
+.board-status-col{display:flex;align-items:center;justify-content:center;gap:0}
 .board-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;width:100%;justify-content:center}
 .board-badge.requested{background:var(--orange-light);color:var(--orange)}
 .board-badge.retrieving{background:var(--blue-light);color:var(--blue);animation:blinkBadge 2s ease-in-out infinite}
 .board-badge.ready{background:var(--green-light);color:var(--green)}
+.grabbed-btn{width:32px;height:32px;border-radius:50%;background:rgba(52,199,89,0.15);border:1.5px solid rgba(52,199,89,0.3);color:var(--green);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;margin-left:6px}
+.grabbed-btn:active{background:var(--green);color:#fff;transform:scale(0.92)}
 @keyframes blinkBadge{0%,100%{opacity:1}50%{opacity:.5}}
 
 .board-empty-wrap{text-align:center;padding:80px 20px}
@@ -183,10 +185,15 @@ function renderBoard(){
         ${countdownHtml}
       </div>
       <div class="board-sizes"><div class="board-sz">${esc(sizesDisplay)}</div></div>
-      <div class="board-status-col"><div class="board-badge ${r.status}">${statusIcon[r.status]} ${r.status==='ready'?'Ready'+(r.binNumber?' · Bin '+r.binNumber:''):(r.status==='retrieving'?'On the Way':'Requested')}</div></div>
+      <div class="board-status-col"><div class="board-badge ${r.status}">${statusIcon[r.status]} ${r.status==='ready'?'Ready'+(r.binNumber?' · Bin '+r.binNumber:''):(r.status==='retrieving'?'On the Way':'Requested')}</div>${r.status==='ready'?`<button class="grabbed-btn" onclick="markGrabbed('${r.key}')" title="Mark as grabbed">✓</button>`:''}</div>
     </div>`;
   }).join('');
 }
+
+window.markGrabbed=async(key)=>{
+  try{ await remove(ref(db,'requests/'+key)); }
+  catch(e){ console.error('Could not remove',e); }
+};
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
