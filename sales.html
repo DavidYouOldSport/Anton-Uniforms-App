@@ -98,6 +98,16 @@ select.ios-input option{background:#fff;color:#000}
 .size-btn{background:var(--bg);border:1.5px solid var(--separator);border-radius:var(--radius-sm);color:var(--label2);font-family:var(--font);font-weight:600;font-size:14px;padding:11px 4px;cursor:pointer;transition:all .15s;text-align:center}
 .size-btn.selected{background:var(--blue);border-color:var(--blue);color:#fff;transform:scale(1.04);box-shadow:0 2px 8px rgba(0,122,255,0.3)}
 
+/* PRODUCT LIST */
+.product-group-header{font-size:11px;font-weight:700;color:var(--label2);text-transform:uppercase;letter-spacing:0.6px;padding:10px 16px 5px;background:var(--bg)}
+.product-row{display:flex;align-items:center;padding:13px 16px;cursor:pointer;transition:background .12s;border-bottom:0.5px solid var(--separator2)}
+.product-row:last-of-type{border-bottom:none}
+.product-row.selected{background:var(--blue-light)}
+.product-row:active{background:var(--blue-light)}
+.product-row-name{flex:1;font-size:15px;font-weight:500;color:var(--label);line-height:1.3}
+.product-row.selected .product-row-name{color:var(--blue);font-weight:600}
+.product-row-chevron{color:var(--label3);font-size:13px;font-weight:700;margin-left:8px;flex-shrink:0}
+
 /* QTY STEPPER */
 .qty-wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--card)}
 .qty-label-text{font-size:16px;color:var(--label)}
@@ -259,6 +269,7 @@ select.ios-input option{background:#fff;color:#000}
         <option>Candeo Peoria</option><option>Caritas Christian Academy</option>
         <option>Chandler Preparatory Academy</option><option>Christ Lutheran</option>
         <option>Christ The King Catholic School</option><option>Cicero Preparatory Academy</option>
+        <option>Collaborative Academy for Leadership</option>
         <option>Glendale Preparatory Academy</option><option>Grace Christian Academy</option>
         <option>Heritage Academy</option><option>Lincoln Preparatory Academy</option>
         <option>Madison Traditional Academy</option><option>Maricopa Institute Of Technology</option>
@@ -268,7 +279,8 @@ select.ios-input option{background:#fff;color:#000}
         <option>Our Lady Of Perpetual Help Scottsdale</option><option>Our Lady Of Sorrows</option>
         <option>Paradise Valley Christian Preparatory</option><option>Paul Revere Academy</option>
         <option>Queen Of Peace Catholic School</option><option>Rancho Solano</option>
-        <option>Roosevelt Preparatory</option><option>Sacred Heart Catholic School</option>
+        <option>Redeemer Christian Academy</option><option>Roosevelt Preparatory</option>
+        <option>Sacred Heart Catholic School</option>
         <option>Scottsdale Christian Academy</option><option>Scottsdale Preparatory Academy</option>
         <option>Seton Catholic Preparatory</option><option>St. Agnes Catholic School</option>
         <option>St. Catherine Of Siena</option><option>St. Gregory Catholic School</option>
@@ -283,27 +295,32 @@ select.ios-input option{background:#fff;color:#000}
     </div>
   </div>
 
-  <!-- Step 2: Item Type -->
+  <!-- Step 2: Product -->
   <div class="ios-section dynamic-section" id="section-item">
-    <div class="ios-section-label">Step 2 — Item Type</div>
+    <div class="ios-section-label">Step 2 — Product</div>
     <div class="ios-card">
-      <div class="item-type-grid">
-        <button class="item-type-card" onclick="selectItemType('Polo',this)"><div class="item-type-card-icon">👔</div><div class="item-type-card-label">Polo</div></button>
-        <button class="item-type-card" onclick="selectItemType('Shorts',this)"><div class="item-type-card-icon">🩳</div><div class="item-type-card-label">Shorts</div></button>
-        <button class="item-type-card" onclick="selectItemType('Pants',this)"><div class="item-type-card-icon">👖</div><div class="item-type-card-label">Pants</div></button>
-        <button class="item-type-card" onclick="selectItemType('Skirt / Skort',this)"><div class="item-type-card-icon">👗</div><div class="item-type-card-label">Skirt / Skort</div></button>
-        <button class="item-type-card" onclick="selectItemType('Oxford Shirt',this)"><div class="item-type-card-icon">🔘</div><div class="item-type-card-label">Oxford Shirt</div></button>
-        <button class="item-type-card" id="other-item-card" onclick="toggleOtherItem(this)"><div class="item-type-card-icon">＋</div><div class="item-type-card-label">Other</div></button>
-      </div>
-      <div class="other-select-wrap" id="other-select-wrap">
-        <select class="ios-input" id="other-item-select" onchange="selectOtherItemType(this.value)" style="margin-bottom:0">
-          <option value="">Select item type…</option>
-          <option>Button-Down Shirt</option><option>T-Shirt</option><option>Blouse</option>
-          <option>Cardigan / Sweater</option><option>Sweatshirt / Hoodie</option>
-          <option>Jacket / Fleece</option><option>Jumper / Dress</option>
-          <option>Vest</option><option>Tie</option><option>Belt</option>
-          <option>Socks / Tights</option><option>PE Uniform</option><option>Other</option>
-        </select>
+      <!-- Catalog-driven product list (shown for all schools with catalog data) -->
+      <div id="product-list"></div>
+      <!-- Essentials fallback — shown for "Other / Essentials" or uncataloged schools -->
+      <div id="essentials-fallback" style="display:none">
+        <div class="item-type-grid">
+          <button id="itype-polo" class="item-type-card" onclick="selectItemType('Polo',this)"><div class="item-type-card-icon">👔</div><div class="item-type-card-label">Polo</div></button>
+          <button id="itype-shorts" class="item-type-card" onclick="selectItemType('Shorts',this)"><div class="item-type-card-icon">🩳</div><div class="item-type-card-label">Shorts</div></button>
+          <button id="itype-pants" class="item-type-card" onclick="selectItemType('Pants',this)"><div class="item-type-card-icon">👖</div><div class="item-type-card-label">Pants</div></button>
+          <button id="itype-skirt" class="item-type-card" onclick="selectItemType('Skirt / Skort',this)"><div class="item-type-card-icon">👗</div><div class="item-type-card-label">Skirt / Skort</div></button>
+          <button id="itype-oxford" class="item-type-card" onclick="selectItemType('Oxford Shirt',this)"><div class="item-type-card-icon">🔘</div><div class="item-type-card-label">Oxford Shirt</div></button>
+          <button class="item-type-card" id="other-item-card" onclick="toggleOtherItem(this)"><div class="item-type-card-icon">＋</div><div class="item-type-card-label">Other</div></button>
+        </div>
+        <div class="other-select-wrap" id="other-select-wrap">
+          <select class="ios-input" id="other-item-select" onchange="selectOtherItemType(this.value)" style="margin-bottom:0">
+            <option value="">Select item type…</option>
+            <option>Button-Down Shirt</option><option>T-Shirt</option><option>Blouse</option>
+            <option>Cardigan / Sweater</option><option>Sweatshirt / Hoodie</option>
+            <option>Jacket / Fleece</option><option>Jumper / Dress</option>
+            <option>Vest</option><option>Tie</option><option>Belt</option>
+            <option>Socks / Tights</option><option>Sweatpants</option><option>PE Uniform</option><option>Other</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -390,6 +407,7 @@ select.ios-input option{background:#fff;color:#000}
 
 <div class="toast" id="toast"></div>
 
+<script src="product_catalog.js"></script>
 <script type="module">
 import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -415,7 +433,6 @@ let myOrders={};
 onValue(reqRef,(snap)=>{
   setConn('online');
   const all=snap.val()||{};
-  // Filter to orders submitted by this salesperson this session
   myOrders={};
   Object.entries(all).forEach(([key,val])=>{
     if(val.salesperson===sessionName) myOrders[key]=val;
@@ -433,14 +450,14 @@ document.getElementById('modal-name-input').addEventListener('keydown',e=>{ if(e
 initName();
 
 // State
-let cart=[], selectedSizes=new Set(), builderItemType='', selectedColor='', qty=1, urgency='normal';
+let cart=[], selectedSizes=new Set(), builderItemType='', selectedColor='', selectedProduct=null, qty=1, urgency='normal';
 
 // Step helpers
 function setStep(n){ for(let i=1;i<=4;i++){ const d=document.getElementById('step'+i+'-dot'); if(!d)continue; d.className=i<n?'step-dot done':i===n?'step-dot active':'step-dot idle'; d.textContent=i<n?'✓':i; } }
 function showSection(id){ document.getElementById(id).classList.add('visible'); }
 function hideSection(id){ document.getElementById(id).classList.remove('visible'); }
 
-// Inventory data
+// Inventory fallback data (used for Other/Essentials and uncataloged schools)
 const ITEM_DATA={
   'Polo':{colors:[{name:'White',hex:'#FFFFFF'},{name:'Navy',hex:'#1a2d5a'},{name:'Light Blue',hex:'#add8e6'},{name:'Dark Navy',hex:'#0d1b3e'},{name:'Red',hex:'#cc2222'},{name:'Black',hex:'#111111'},{name:'Dark Green',hex:'#1a4a2e'},{name:'Royal',hex:'#2055b8'},{name:'Cardinal',hex:'#8b1a2e'},{name:'Purple',hex:'#5b2a8e'},{name:'Ash Grey',hex:'#b0b0b0'},{name:'Maroon',hex:'#6b1a2a'},{name:'Gold',hex:'#c9a84c'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','XS','S','M','L','XL','2XL','3XL']},
   'Shorts':{colors:[{name:'Khaki',hex:'#c8a96e'},{name:'Navy',hex:'#1a2d5a'},{name:'White',hex:'#FFFFFF'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Royal',hex:'#2055b8'},{name:'Green',hex:'#2a6e3a'},{name:'Red',hex:'#cc2222'},{name:'Sky Blue',hex:'#87ceeb'}],sizes:['YXXXS','YXXS','YXS','YS','YM','YL','YXL','4','6','8','10','12','14','16','18','XS','S','M','L','XL','2XL','26','28']},
@@ -451,17 +468,81 @@ const ITEM_DATA={
 const OTHER_COLORS=[{name:'Navy',hex:'#1a2d5a'},{name:'White',hex:'#FFFFFF'},{name:'Khaki',hex:'#c8a96e'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Red',hex:'#cc2222'},{name:'Royal',hex:'#2055b8'},{name:'Light Blue',hex:'#add8e6'},{name:'Dark Green',hex:'#1a4a2e'}];
 const OTHER_SIZES=['XS','S','M','L','XL','2XL','4','6','8','10','12','14','16'];
 
+const COLOR_HEX={
+  'ash gray':'#b0b0b0','ash grey':'#b0b0b0','black':'#111111','blue':'#3a6ab8',
+  'burgundy':'#800020','cardinal':'#8b1a2e','charcoal':'#444444','columbia blue':'#c4d8e2',
+  'cream':'#fffdd0','crimson':'#8b0000','dark green':'#1a4a2e','dark navy':'#0d1b3e',
+  'forest green':'#228b22','gold':'#c9a84c','green':'#2a6e3a','grey':'#888888','gray':'#888888',
+  'hunter green':'#355e3b','kelly green':'#4cbb17','khaki':'#c8a96e','light blue':'#add8e6',
+  'light grey':'#d3d3d3','maroon':'#6b1a2a','navy':'#1a2d5a','orange':'#ff8c00','pink':'#ffb6c1',
+  'purple':'#5b2a8e','red':'#cc2222','royal':'#2055b8','royal blue':'#2055b8',
+  'scarlet':'#ff2400','silver':'#c0c0c0','sky blue':'#87ceeb','sport grey':'#b8b8b8',
+  'tan':'#d2b48c','white':'#FFFFFF','yellow':'#f5c518'
+};
+
+// Product catalog
+function getSchoolProducts(school){
+  if(typeof window.PRODUCT_CATALOG==='undefined') return null;
+  return window.PRODUCT_CATALOG[school]||null;
+}
+function catalogColorsToChips(colorNames){
+  return colorNames.map(name=>{
+    const isPlaid=/plaid|^pld/i.test(name);
+    return{name,hex:isPlaid?null:(COLOR_HEX[name.toLowerCase()]||'#888888'),isPlaid};
+  });
+}
+
+const TYPE_ORDER=['Polo','Oxford Shirt','Pants','Shorts','Skirt / Skort','Jacket','Sweatshirt / Hoodie','Sweatpants','Cardigan','Vest','Blazer','Jumper','Tie','Bow Tie','Belt','Socks / Tights','Undershirt','Other'];
+
+function renderProductList(products){
+  const el=document.getElementById('product-list');
+  const fallback=document.getElementById('essentials-fallback');
+  if(!products||products.length===0){ el.innerHTML=''; fallback.style.display='block'; return; }
+  fallback.style.display='none';
+  const groups={};
+  products.forEach(p=>{ if(!groups[p.itemType])groups[p.itemType]=[]; groups[p.itemType].push(p); });
+  const types=Object.keys(groups).sort((a,b)=>{ const ai=TYPE_ORDER.indexOf(a),bi=TYPE_ORDER.indexOf(b); if(ai>=0&&bi>=0)return ai-bi; if(ai>=0)return-1; if(bi>=0)return 1; return a.localeCompare(b); });
+  el.innerHTML=types.map(type=>`<div class="product-group-header">${esc(type)}</div>${groups[type].map(p=>`<div class="product-row" data-handle="${esc(p.handle)}"><span class="product-row-name">${esc(p.displayTitle)}</span><span class="product-row-chevron">›</span></div>`).join('')}`).join('');
+  el.querySelectorAll('.product-row').forEach(row=>row.addEventListener('click',()=>window.selectProduct(row.dataset.handle,row)));
+}
+
 window.onSchoolChange=()=>{
   const val=document.getElementById('school').value;
-  if(val){ showSection('section-item'); setStep(2); }
-  else { ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1); }
-  builderItemType=''; selectedColor='';
+  const el=document.getElementById('product-list');
+  const fallback=document.getElementById('essentials-fallback');
+  if(val){
+    showSection('section-item'); setStep(2);
+    const products=getSchoolProducts(val);
+    if(products&&products.length>0){ renderProductList(products); }
+    else { el.innerHTML=''; fallback.style.display='block'; }
+  } else {
+    ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1);
+    el.innerHTML=''; fallback.style.display='none';
+  }
+  selectedProduct=null; builderItemType=''; selectedColor='';
   document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
   hideSection('section-color'); hideSection('section-sizes'); hideSection('section-add-btn');
 };
 
+window.selectProduct=(handle,btn)=>{
+  const school=document.getElementById('school').value;
+  const products=getSchoolProducts(school);
+  if(!products)return;
+  selectedProduct=products.find(p=>p.handle===handle);
+  if(!selectedProduct)return;
+  builderItemType=selectedProduct.itemType; selectedColor=''; selectedSizes=new Set();
+  document.querySelectorAll('.product-row').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const colorNames=[...new Set(selectedProduct.variants.map(v=>v.color).filter(c=>c))];
+  renderColorChips(catalogColorsToChips(colorNames));
+  showSection('section-color'); setStep(3);
+  hideSection('section-sizes'); hideSection('section-add-btn');
+  setTimeout(()=>document.getElementById('section-color').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+};
+
+// Essentials fallback — item type selection (no catalog)
 window.selectItemType=(type,btn)=>{
-  builderItemType=type; selectedColor='';
+  selectedProduct=null; builderItemType=type; selectedColor='';
   document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
   document.getElementById('other-select-wrap').classList.remove('visible');
@@ -472,7 +553,7 @@ window.selectItemType=(type,btn)=>{
   setTimeout(()=>document.getElementById('section-color').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
 };
 window.toggleOtherItem=(btn)=>{ btn.classList.toggle('selected'); document.getElementById('other-select-wrap').classList.toggle('visible'); document.getElementById('other-item-select').value=''; };
-window.selectOtherItemType=(val)=>{ if(!val)return; builderItemType=val; selectedColor=''; document.getElementById('other-item-card').classList.add('selected'); renderColorChips(OTHER_COLORS); showSection('section-color'); setStep(3); hideSection('section-sizes'); hideSection('section-add-btn'); selectedSizes=new Set(); };
+window.selectOtherItemType=(val)=>{ if(!val)return; selectedProduct=null; builderItemType=val; selectedColor=''; document.getElementById('other-item-card').classList.add('selected'); renderColorChips(OTHER_COLORS); showSection('section-color'); setStep(3); hideSection('section-sizes'); hideSection('section-add-btn'); selectedSizes=new Set(); };
 
 function renderColorChips(colors){
   const grid=document.getElementById('color-chips-grid');
@@ -480,20 +561,35 @@ function renderColorChips(colors){
   document.getElementById('plaid-select').value='';
   grid.innerHTML=colors.map(c=>{
     const s=c.hex?(c.hex==='#FFFFFF'?'background:#fff;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,0.18);':'background:'+c.hex+';'):'background:repeating-linear-gradient(45deg,#c8a96e,#c8a96e 4px,#1a2d5a 4px,#1a2d5a 8px);';
-    return `<button class="color-chip${c.isPlaid?' plaid-chip':''}" onclick="selectColor('${c.name}',this,${c.isPlaid||false})"><span class="color-swatch" style="${s}"></span>${c.name}</button>`;
+    return `<button class="color-chip${c.isPlaid?' plaid-chip':''}" data-color="${esc(c.name)}" data-isplaid="${c.isPlaid?'true':'false'}"><span class="color-swatch" style="${s}"></span>${c.name}</button>`;
   }).join('');
+  grid.querySelectorAll('.color-chip').forEach(btn=>btn.addEventListener('click',()=>window.selectColor(btn.dataset.color,btn,btn.dataset.isplaid==='true')));
 }
 window.selectColor=(name,btn,isPlaid)=>{
   document.querySelectorAll('.color-chip').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected'); selectedColor=name;
-  if(isPlaid){ document.getElementById('plaid-select-wrap').style.display='block'; document.getElementById('plaid-select').value=''; selectedColor=''; return; }
+  if(isPlaid&&name.toLowerCase()==='plaid'){ document.getElementById('plaid-select-wrap').style.display='block'; document.getElementById('plaid-select').value=''; selectedColor=''; return; }
   document.getElementById('plaid-select-wrap').style.display='none';
-  renderSizeGrid(builderItemType);
+  renderSizeGrid(builderItemType,name);
   showSection('section-sizes'); setStep(4); showSection('section-add-btn');
   setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
 };
-window.selectPlaid=(val)=>{ if(!val)return; selectedColor=val; renderSizeGrid(builderItemType); showSection('section-sizes'); setStep(4); showSection('section-add-btn'); setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100); };
-function renderSizeGrid(type){ const grid=document.getElementById('size-grid'); selectedSizes=new Set(); const sizes=(ITEM_DATA[type]||{}).sizes||OTHER_SIZES; grid.innerHTML=sizes.map(s=>`<button class="size-btn" onclick="toggleSize(this,'${s}')">${s}</button>`).join(''); }
+window.selectPlaid=(val)=>{ if(!val)return; selectedColor=val; renderSizeGrid(builderItemType,val); showSection('section-sizes'); setStep(4); showSection('section-add-btn'); setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100); };
+
+function renderSizeGrid(type,color){
+  const grid=document.getElementById('size-grid');
+  selectedSizes=new Set();
+  let sizes;
+  if(selectedProduct&&color){
+    const clower=color.toLowerCase();
+    sizes=[...new Set(selectedProduct.variants.filter(v=>v.color.toLowerCase()===clower).map(v=>v.size).filter(s=>s))];
+    if(sizes.length===0) sizes=(ITEM_DATA[type]||{}).sizes||OTHER_SIZES;
+  } else {
+    sizes=(ITEM_DATA[type]||{}).sizes||OTHER_SIZES;
+  }
+  grid.innerHTML=sizes.map(s=>`<button class="size-btn" data-size="${esc(s)}">${esc(s)}</button>`).join('');
+  grid.querySelectorAll('.size-btn').forEach(btn=>btn.addEventListener('click',()=>window.toggleSize(btn,btn.dataset.size)));
+}
 
 window.toggleSize=(btn,size)=>{ btn.classList.toggle('selected'); selectedSizes.has(size)?selectedSizes.delete(size):selectedSizes.add(size); };
 window.changeQty=(delta)=>{ qty=Math.max(1,Math.min(20,qty+delta)); document.getElementById('qty-display').textContent=qty; };
@@ -502,11 +598,19 @@ window.setUrgency=(u)=>{ urgency=u; document.getElementById('urg-normal').classL
 window.addToCart=()=>{
   const school=document.getElementById('school').value;
   if(!school){toast('Select a school first',true);return;}
-  if(!builderItemType){toast('Select an item type',true);return;}
+  if(!builderItemType){toast('Select a product',true);return;}
   if(!selectedColor){toast('Select a color',true);return;}
   if(selectedSizes.size===0){toast('Select at least one size',true);return;}
   const notes=document.getElementById('item-notes').value.trim();
-  cart.push({school,itemType:builderItemType,color:selectedColor,sizes:[...selectedSizes],qty,notes});
+  let skus={};
+  if(selectedProduct){
+    const clower=selectedColor.toLowerCase();
+    [...selectedSizes].forEach(size=>{
+      const v=selectedProduct.variants.find(v=>v.color.toLowerCase()===clower&&v.size===size);
+      if(v) skus[size]=v.sku;
+    });
+  }
+  cart.push({school,itemType:builderItemType,productHandle:selectedProduct?.handle||'',productTitle:selectedProduct?.displayTitle||builderItemType,color:selectedColor,sizes:[...selectedSizes],qty,notes,skus});
   resetBuilder(false); renderCart();
   toast('Item added ✓');
 };
@@ -516,19 +620,23 @@ function renderCart(){
   const el=document.getElementById('cart-display');
   document.getElementById('cart-count').textContent=cart.length;
   if(cart.length===0){ el.innerHTML='<div class="cart-empty-card"><div class="cart-empty-icon">🛒</div><div class="cart-empty-text">No items yet — add items below</div></div>'; return; }
-  el.innerHTML=cart.map((item,i)=>`<div class="cart-item-card"><div class="cart-item-icon">👕</div><div class="cart-item-body"><div class="cart-item-name">${esc(item.itemType)}${item.color?' — '+esc(item.color):''}</div><div class="cart-item-detail">${esc(item.school)} · Sizes: <strong>${item.sizes.join(', ')}</strong> · Qty ${item.qty} each${item.notes?'<br><em>'+esc(item.notes)+'</em>':''}</div></div><button class="cart-remove-btn" onclick="removeFromCart(${i})">✕</button></div>`).join('');
+  el.innerHTML=cart.map((item,i)=>{
+    const title=item.productTitle||item.itemType;
+    return `<div class="cart-item-card"><div class="cart-item-icon">👕</div><div class="cart-item-body"><div class="cart-item-name">${esc(title)}${item.color?' — '+esc(item.color):''}</div><div class="cart-item-detail">${esc(item.school)} · Sizes: <strong>${item.sizes.join(', ')}</strong> · Qty ${item.qty} each${item.notes?'<br><em>'+esc(item.notes)+'</em>':''}</div></div><button class="cart-remove-btn" onclick="removeFromCart(${i})">✕</button></div>`;
+  }).join('');
 }
 
 function resetBuilder(fullReset){
-  if(fullReset){ document.getElementById('school').value=''; ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1); }
+  if(fullReset){ document.getElementById('school').value=''; ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1); document.getElementById('product-list').innerHTML=''; document.getElementById('essentials-fallback').style.display='none'; }
   else { ['section-color','section-sizes','section-add-btn'].forEach(hideSection); showSection('section-item'); setStep(2); }
   document.getElementById('item-notes').value='';
   document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.product-row').forEach(b=>b.classList.remove('selected'));
   document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
   document.querySelectorAll('.color-chip').forEach(b=>b.classList.remove('selected'));
   document.getElementById('other-select-wrap').classList.remove('visible');
   document.getElementById('plaid-select-wrap').style.display='none';
-  builderItemType=''; selectedColor=''; selectedSizes=new Set(); qty=1;
+  selectedProduct=null; builderItemType=''; selectedColor=''; selectedSizes=new Set(); qty=1;
   document.getElementById('qty-display').textContent='1';
 }
 
@@ -536,36 +644,23 @@ function renderMyOrders(){
   const section=document.getElementById('live-orders-section');
   const list=document.getElementById('live-orders-list');
   const orders=Object.entries(myOrders).map(([key,val])=>({key,...val}))
-    .filter(r=>r.status!=='') 
+    .filter(r=>r.status!=='')
     .sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
   if(orders.length===0){ section.style.display='none'; return; }
   section.style.display='block';
   const statusLabel={requested:'In Queue',retrieving:'Being Picked',ready:'Ready for Pickup'};
   const statusIcon={requested:'⏳',retrieving:'↗',ready:'✓'};
   list.innerHTML=orders.map(r=>{
-    const itemSummary=r.items&&r.items.length===1?r.items[0].itemType+(r.items[0].color?' · '+r.items[0].color:''):((r.items||[]).length+' items');
+    const item0=r.items?.[0];
+    const itemSummary=r.items&&r.items.length===1?(item0.productTitle||item0.itemType)+(item0.color?' · '+item0.color:''):((r.items||[]).length+' items');
     const binHtml=r.status==='ready'&&r.binNumber?`<div class="bin-callout"><div class="bin-callout-icon">📦</div><div class="bin-callout-text"><div class="bin-callout-label">Pick up from</div><div class="bin-callout-num">Bin ${esc(String(r.binNumber))}</div></div></div><button class="pickup-btn" onclick="markPickedUp('${r.key}')">✓ Picked Up</button>`:'';
-    return `<div class="live-order-card">
-      <div class="live-order-accent ${r.status}"></div>
-      <div class="live-order-body">
-        <div class="live-order-top">
-          <div>
-            <div class="live-order-family">${esc(r.familyName||'—')}</div>
-            <div class="live-order-meta">${esc(r.items&&r.items[0]?r.items[0].school:'—')} · ${esc(itemSummary)}</div>
-          </div>
-          <div class="live-order-status ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</div>
-        </div>
-        ${binHtml}
-      </div>
-    </div>`;
+    return `<div class="live-order-card"><div class="live-order-accent ${r.status}"></div><div class="live-order-body"><div class="live-order-top"><div><div class="live-order-family">${esc(r.familyName||'—')}</div><div class="live-order-meta">${esc(item0?.school||'—')} · ${esc(itemSummary)}</div></div><div class="live-order-status ${r.status}">${statusIcon[r.status]} ${statusLabel[r.status]}</div></div>${binHtml}</div></div>`;
   }).join('');
 }
 
 window.markPickedUp=async(key)=>{
-  try{
-    await remove(ref(db,'requests/'+key));
-    toast('✓ Order picked up');
-  }catch(e){ toast('Could not remove — check connection',true); }
+  try{ await remove(ref(db,'requests/'+key)); toast('✓ Order picked up'); }
+  catch(e){ toast('Could not remove — check connection',true); }
 };
 
 window.submitRequest=async()=>{
