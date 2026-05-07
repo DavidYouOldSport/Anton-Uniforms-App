@@ -79,7 +79,20 @@ header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20p
 
 .danger-btn{width:100%;background:var(--card);border:none;border-radius:var(--radius-lg);padding:14px;font-family:var(--font);font-size:15px;font-weight:600;color:var(--red);cursor:pointer;box-shadow:var(--shadow-sm)}
 .danger-btn:active{background:var(--red-light)}
+.export-btn{width:100%;background:var(--card);border:none;border-radius:var(--radius-lg);padding:14px;font-family:var(--font);font-size:15px;font-weight:600;color:var(--green);cursor:pointer;box-shadow:var(--shadow-sm)}
+.export-btn:active{background:var(--green-light)}
 .ios-section{margin:20px 16px 0}
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;animation:fadeBackdrop .2s ease}
+@keyframes fadeBackdrop{from{opacity:0}to{opacity:1}}
+.modal-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:12px 24px 48px;width:100%;animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--separator);border-radius:2px;margin:0 auto 22px}
+.modal-title{font-size:24px;font-weight:800;color:var(--label);letter-spacing:-0.5px;margin-bottom:6px}
+.modal-sub{font-size:15px;color:var(--label2);margin-bottom:24px;line-height:1.5}
+.modal-input{width:100%;background:var(--bg);border:none;outline:none;border-radius:var(--radius-lg);font-family:var(--font);font-size:18px;font-weight:500;color:var(--label);padding:16px 18px;margin-bottom:14px;-webkit-appearance:none}
+.modal-input::placeholder{color:var(--label3)}
+.modal-confirm-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(255,59,48,0.3)}
+.modal-confirm-btn:active{transform:scale(0.98)}
 </style>
 </head>
 <body>
@@ -112,9 +125,24 @@ header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20p
   <div id="pane-leaderboard"><div id="lb-rows"></div></div>
   <div id="pane-log" style="display:none">
     <div class="log-card" id="log-rows"></div>
+    <div class="ios-section">
+      <button class="export-btn" onclick="exportLog()">↓ Export to Excel (CSV)</button>
+    </div>
     <div class="ios-section" style="margin-bottom:12px">
       <button class="danger-btn" onclick="clearLog()">Clear Order Log</button>
     </div>
+  </div>
+</div>
+
+<!-- PIN Modal -->
+<div class="modal-backdrop" id="pin-modal" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="pin-modal-title">Confirm</div>
+    <div class="modal-sub" id="pin-modal-sub">Enter manager PIN to continue.</div>
+    <input class="modal-input" type="password" id="pin-modal-input" placeholder="PIN" autocomplete="off" maxlength="10" inputmode="numeric">
+    <div id="pin-error" style="color:var(--red);font-size:13px;font-weight:600;margin-bottom:10px;min-height:18px"></div>
+    <button class="modal-confirm-btn" onclick="confirmPin()">Confirm</button>
   </div>
 </div>
 
@@ -164,7 +192,32 @@ function renderLog(){
   el.innerHTML=completedLog.slice(0,100).map(e=>`<div class="log-row"><div class="log-icon">✅</div><div class="log-info"><div class="log-school">${e.familyName?esc(e.familyName)+' · ':''} ${esc(e.school||'—')} · ${e.itemCount||1} item${(e.itemCount||1)!==1?'s':''}</div><div class="log-meta">Sales: ${esc(e.salesperson||'—')} · ${new Date(e.completedAt||Date.now()).toLocaleDateString()}</div></div><div class="log-time-col"><div class="log-time">${fmtDur(e.durationMs||0)}</div><div class="log-picker">${esc(e.pickedBy||'—')}</div></div></div>`).join('');
 }
 
-window.clearLog=async()=>{ if(!confirm('Clear entire log? This cannot be undone.'))return; try{await remove(logRef);}catch(e){} };
+const MANAGER_PIN='1234';
+let pendingPinAction=null;
+window.showPinModal=(title,sub,action)=>{ pendingPinAction=action; document.getElementById('pin-modal-title').textContent=title; document.getElementById('pin-modal-sub').textContent=sub; const m=document.getElementById('pin-modal'),inp=document.getElementById('pin-modal-input'); inp.value=''; document.getElementById('pin-error').textContent=''; m.style.display='flex'; m.onclick=(e)=>{ if(e.target===m) m.style.display='none'; }; setTimeout(()=>inp.focus(),350); };
+window.confirmPin=()=>{ const v=document.getElementById('pin-modal-input').value; if(v!==MANAGER_PIN){ document.getElementById('pin-error').textContent='Incorrect PIN'; document.getElementById('pin-modal-input').value=''; document.getElementById('pin-modal-input').focus(); return; } document.getElementById('pin-modal').style.display='none'; if(pendingPinAction){ pendingPinAction(); pendingPinAction=null; } };
+document.getElementById('pin-modal-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.confirmPin(); });
+window.clearLog=()=>{ showPinModal('Clear Order Log','This permanently deletes the entire performance history.',async()=>{ try{await remove(logRef);}catch(e){} }); };
+
+window.exportLog=()=>{
+  if(completedLog.length===0){ alert('No data to export.'); return; }
+  const headers=['Date','Time','Family Name','School','Salesperson','Picker','Items','Duration (min)','Urgency','Bin'];
+  const rows=completedLog.map(e=>{
+    const dt=new Date(e.completedAt||Date.now());
+    const date=dt.toLocaleDateString('en-US');
+    const time=dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const school=e.school||(e.items&&e.items[0]?e.items[0].school:'')||'';
+    const itemsSummary=(e.items||[]).map(i=>`${i.itemType}${i.color?' ('+i.color+')':''} [${(i.sizes||[]).join(',')}] x${i.qty||1}`).join('; ')||'';
+    const durMin=e.durationMs?(e.durationMs/60000).toFixed(1):'';
+    return [date,time,e.familyName||'',school,e.salesperson||'',e.pickedBy||'',itemsSummary,durMin,e.urgency||'normal',e.binNumber||''];
+  });
+  const csv=[headers,...rows].map(row=>row.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const today=new Date().toISOString().slice(0,10);
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=today+'_anton-uniforms-order-log.csv'; a.click();
+  URL.revokeObjectURL(url);
+};
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
 </body>
