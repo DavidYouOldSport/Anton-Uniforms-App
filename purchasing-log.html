@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anton Uniforms — Purchasing Log</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --bg:#f2f2f7; --card:#ffffff; --separator:rgba(60,60,67,0.12); --separator2:rgba(60,60,67,0.06);
+  --label:#000000; --label2:rgba(60,60,67,0.6); --label3:rgba(60,60,67,0.3);
+  --blue:#007AFF; --blue-light:rgba(0,122,255,0.12);
+  --green:#34C759; --green-light:rgba(52,199,89,0.12);
+  --red:#FF3B30; --red-light:rgba(255,59,48,0.12);
+  --orange:#FF9500; --orange-light:rgba(255,149,0,0.12);
+  --radius-sm:10px; --radius:13px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--label);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--separator);padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(145deg,#B8860B,#DAA520);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(184,134,11,0.35)}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-size:15px;font-weight:700;color:var(--label);letter-spacing:-0.3px;line-height:1.2}
+.logo-sub{font-size:11px;font-weight:500;color:var(--label2)}
+.header-right{display:flex;align-items:center;gap:8px}
+.conn-status{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;transition:all .3s}
+.conn-status.online{color:var(--green);background:var(--green-light)}
+.conn-status.offline{color:var(--red);background:var(--red-light)}
+.conn-status.connecting{color:var(--orange);background:var(--orange-light)}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.conn-dot.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.35)}}
+
+.page-hdr{padding:20px 20px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.page-title{font-size:28px;font-weight:800;color:var(--label);letter-spacing:-0.6px}
+.page-sub{font-size:14px;color:var(--label2);margin-top:3px}
+.hdr-actions{display:flex;gap:8px;flex-shrink:0;margin-top:4px}
+.export-btn{background:var(--blue-light);border:none;color:var(--blue);border-radius:20px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px}
+.export-btn:active{transform:scale(0.97)}
+.clear-pill{background:var(--red-light);border:none;color:var(--red);border-radius:20px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.clear-pill:active{transform:scale(0.97)}
+
+.count-bar{padding:10px 20px 0;font-size:13px;color:var(--label2);font-weight:500}
+
+.log-list{padding:12px 16px 80px;display:flex;flex-direction:column;gap:10px}
+.log-card{background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
+@keyframes springIn{from{opacity:0;transform:scale(0.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.log-card-accent{height:4px;background:linear-gradient(90deg,var(--orange),#FFCC00)}
+.log-card-body{padding:14px 16px}
+.log-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.log-family{font-size:17px;font-weight:800;color:var(--label);letter-spacing:-0.3px}
+.log-school{font-size:13px;color:var(--label2);margin-top:2px}
+.log-ts{font-size:12px;color:var(--label3);font-weight:500;text-align:right;flex-shrink:0}
+.log-item-row{background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;margin-top:6px}
+.log-item-name{font-size:14px;font-weight:700;color:var(--label);margin-bottom:4px}
+.log-item-detail{font-size:13px;color:var(--label2);margin-bottom:5px}
+.log-sku{font-family:monospace;font-size:13px;font-weight:600;color:#000;background:var(--separator2);border-radius:5px;padding:2px 7px;display:inline-block;margin-top:2px}
+.log-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.log-chip{border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700}
+.log-chip.qty{background:var(--blue-light);color:var(--blue)}
+.log-chip.bin{background:var(--green-light);color:var(--green)}
+.log-chip.picker{background:var(--separator);color:var(--label2)}
+
+.spinner-wrap{text-align:center;padding:60px 20px}
+.spinner{width:32px;height:32px;border:3px solid var(--separator);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-txt{font-size:14px;color:var(--label2);font-weight:500}
+
+.empty-wrap{text-align:center;padding:60px 24px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty-glyph{width:64px;height:64px;border-radius:16px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px}
+.empty-title{font-size:17px;font-weight:600;color:var(--label)}
+.empty-body{font-size:14px;color:var(--label2);max-width:220px;line-height:1.4}
+
+.toast{position:fixed;bottom:34px;left:50%;transform:translateX(-50%) translateY(80px) scale(0.95);background:rgba(50,50,50,0.92);backdrop-filter:blur(12px);color:#fff;padding:12px 22px;border-radius:22px;font-weight:600;font-size:14px;z-index:999;transition:transform .35s cubic-bezier(.34,1.4,.64,1),opacity .25s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.25);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0) scale(1);opacity:1}
+.toast.error{background:rgba(255,59,48,0.92)}
+
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;animation:fadeBackdrop .2s ease}
+@keyframes fadeBackdrop{from{opacity:0}to{opacity:1}}
+.modal-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:12px 24px 48px;width:100%;animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--separator);border-radius:2px;margin:0 auto 22px}
+.modal-title{font-size:24px;font-weight:800;color:var(--label);letter-spacing:-0.5px;margin-bottom:6px}
+.modal-sub{font-size:15px;color:var(--label2);margin-bottom:24px;line-height:1.5}
+.modal-input{width:100%;background:var(--bg);border:none;outline:none;border-radius:var(--radius-lg);font-family:var(--font);font-size:18px;font-weight:500;color:var(--label);padding:16px 18px;margin-bottom:14px;-webkit-appearance:none}
+.modal-input::placeholder{color:var(--label3)}
+.modal-confirm-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(255,59,48,0.3)}
+.modal-confirm-btn:active{transform:scale(0.98)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-mark">AU</div>
+    <div class="logo-text">
+      <div class="logo-name">Anton Uniforms</div>
+      <div class="logo-sub">Purchasing Log</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="conn-status connecting" id="conn-status">
+      <div class="conn-dot pulse"></div>
+      <span id="conn-text">Connecting</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-hdr">
+  <div>
+    <div class="page-title">Unable to Pick</div>
+    <div class="page-sub">Items that need to be shipped to families</div>
+  </div>
+  <div class="hdr-actions">
+    <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="clear-pill" onclick="clearLog()">Clear</button>
+  </div>
+</div>
+<div class="count-bar" id="count-bar"></div>
+
+<div id="log-list">
+  <div class="spinner-wrap"><div class="spinner"></div><div class="spinner-txt">Loading…</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- PIN Modal -->
+<div class="modal-backdrop" id="pin-modal" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Clear Log</div>
+    <div class="modal-sub">Enter manager PIN to permanently clear the purchasing log.</div>
+    <input class="modal-input" type="password" id="pin-input" placeholder="PIN" autocomplete="off" maxlength="10" inputmode="numeric">
+    <div id="pin-error" style="color:var(--red);font-size:13px;font-weight:600;margin-bottom:10px;min-height:18px"></div>
+    <button class="modal-confirm-btn" onclick="confirmClear()">Clear All Entries</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC6zm-642fbrpKRknIhJkTUm1esUsXDTHQ",
+  authDomain:"anton-uniforms.firebaseapp.com",
+  databaseURL:"https://anton-uniforms-default-rtdb.firebaseio.com",
+  projectId:"anton-uniforms",
+  storageBucket:"anton-uniforms.firebasestorage.app",
+  messagingSenderId:"539546407658",
+  appId:"1:539546407658:web:1b76e5334f7f87e6103d93"
+});
+const db=getDatabase(app), auth=getAuth(app);
+const logRef=ref(db,'unableToPickLog');
+
+const connEl=document.getElementById('conn-status'), connText=document.getElementById('conn-text');
+function setConn(s){ connEl.className='conn-status '+s; connEl.querySelector('.conn-dot').className='conn-dot'+(s==='connecting'?' pulse':''); connText.textContent=s==='online'?'Live':s==='offline'?'Offline':'Connecting'; }
+signInAnonymously(auth).catch(()=>setConn('offline'));
+
+let logEntries=[];
+
+onValue(logRef,(snap)=>{
+  setConn('online');
+  const data=snap.val()||{};
+  logEntries=Object.entries(data).map(([key,val])=>({key,...val})).sort((a,b)=>(b.loggedAt||0)-(a.loggedAt||0));
+  render();
+},()=>setConn('offline'));
+
+function render(){
+  const list=document.getElementById('log-list');
+  const countBar=document.getElementById('count-bar');
+  if(logEntries.length===0){
+    countBar.textContent='';
+    list.innerHTML=`<div class="log-list"><div class="empty-wrap"><div class="empty-glyph">✅</div><div class="empty-title">All clear</div><div class="empty-body">No unable-to-pick items logged. Everything has been fulfilled.</div></div></div>`;
+    return;
+  }
+  countBar.textContent=`${logEntries.length} item${logEntries.length!==1?'s':''} need to be shipped`;
+  list.innerHTML=`<div class="log-list">${logEntries.map(e=>{
+    const d=e.loggedAt?new Date(e.loggedAt):null;
+    const dateStr=d?d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'}):'—';
+    const timeStr=d?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
+    const itemName=[e.productTitle,e.color].filter(Boolean).join(' — ');
+    const skuHtml=e.sku?`<span class="log-sku">${esc(e.sku)}</span>`:'';
+    return `<div class="log-card"><div class="log-card-accent"></div><div class="log-card-body"><div class="log-top"><div><div class="log-family">${esc(e.familyName||'—')}</div><div class="log-school">${esc(e.school||'—')}</div></div><div class="log-ts">${dateStr}<br>${timeStr}</div></div><div class="log-item-row"><div class="log-item-name">${esc(itemName||'Unknown Item')}</div><div class="log-item-detail">Size: <strong>${esc(e.size||'—')}</strong></div>${skuHtml}<div class="log-chips"><span class="log-chip qty">Qty: ${e.qty||1}</span><span class="log-chip bin">Bin ${e.binNumber||'—'}</span><span class="log-chip picker">Picked by: ${esc(e.pickedBy||'—')}</span></div></div></div></div>`;
+  }).join('')}</div>`;
+}
+
+const MANAGER_PIN='1234';
+
+window.clearLog=()=>{
+  document.getElementById('pin-input').value='';
+  document.getElementById('pin-error').textContent='';
+  const m=document.getElementById('pin-modal');
+  m.style.display='flex';
+  m.onclick=(e)=>{ if(e.target===m) m.style.display='none'; };
+  setTimeout(()=>document.getElementById('pin-input').focus(),350);
+};
+
+window.confirmClear=async()=>{
+  const v=document.getElementById('pin-input').value;
+  if(v!==MANAGER_PIN){ document.getElementById('pin-error').textContent='Incorrect PIN'; document.getElementById('pin-input').value=''; document.getElementById('pin-input').focus(); return; }
+  document.getElementById('pin-modal').style.display='none';
+  try{ await remove(logRef); toast('Log cleared'); }
+  catch(e){ toast('Could not clear — check connection',true); }
+};
+
+document.getElementById('pin-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.confirmClear(); });
+
+window.exportCSV=()=>{
+  if(logEntries.length===0){ toast('Nothing to export',true); return; }
+  const cols=['Date','Time','Family Name','School','Product','Color','Size','SKU','Qty','Picker','Bin','Order ID'];
+  const rows=logEntries.map(e=>{
+    const d=e.loggedAt?new Date(e.loggedAt):null;
+    return [
+      d?d.toLocaleDateString([],{month:'2-digit',day:'2-digit',year:'numeric'}):'',
+      d?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'',
+      e.familyName||'',
+      e.school||'',
+      e.productTitle||'',
+      e.color||'',
+      e.size||'',
+      e.sku||'',
+      e.qty||1,
+      e.pickedBy||'',
+      e.binNumber||'',
+      e.orderId||''
+    ].map(v=>csvCell(String(v)));
+  });
+  const csv=[cols.map(csvCell).join(','),...rows.map(r=>r.join(','))].join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const today=new Date().toISOString().slice(0,10);
+  a.href=url; a.download=`anton-unable-to-pick-${today}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast(`✓ Exported ${logEntries.length} rows`);
+};
+
+function csvCell(v){ return /[,"\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg,isError){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(isError?' error':''); setTimeout(()=>t.className='toast'+(isError?' error':''),2800); }
+</script>
+</body>
+</html>
