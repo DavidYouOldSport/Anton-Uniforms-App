@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anton Uniforms — Sales</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --bg:#f2f2f7; --card:#ffffff; --separator:rgba(60,60,67,0.12); --separator2:rgba(60,60,67,0.06);
+  --label:#000000; --label2:rgba(60,60,67,0.6); --label3:rgba(60,60,67,0.3);
+  --blue:#007AFF; --blue-light:rgba(0,122,255,0.12);
+  --green:#34C759; --green-light:rgba(52,199,89,0.12);
+  --red:#FF3B30; --red-light:rgba(255,59,48,0.12);
+  --orange:#FF9500; --orange-light:rgba(255,149,0,0.12);
+  --purple:#AF52DE; --purple-light:rgba(175,82,222,0.12);
+  --gold:#B8860B;
+  --radius-sm:10px; --radius:13px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--label);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+header{background:rgba(242,242,247,0.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:0.5px solid var(--separator);padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(145deg,#B8860B,#DAA520);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(184,134,11,0.35)}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-size:15px;font-weight:700;color:var(--label);letter-spacing:-0.3px;line-height:1.2}
+.logo-sub{font-size:11px;font-weight:500;color:var(--label2)}
+.conn-status{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;transition:all .3s}
+.conn-status.online{color:var(--green);background:var(--green-light)}
+.conn-status.offline{color:var(--red);background:var(--red-light)}
+.conn-status.connecting{color:var(--orange);background:var(--orange-light)}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.conn-dot.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.35)}}
+
+/* PAGE */
+.page{padding:0 0 80px}
+.page-header{padding:20px 20px 4px}
+.page-title{font-size:28px;font-weight:800;color:var(--label);letter-spacing:-0.6px}
+.page-sub{font-size:14px;color:var(--label2);margin-top:3px}
+
+/* SECTIONS */
+.ios-section{margin:20px 16px 0}
+.ios-section-label{font-size:13px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;padding-left:4px}
+.ios-card{background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden}
+.ios-input{width:100%;background:transparent;border:none;outline:none;font-family:var(--font);font-size:16px;font-weight:400;color:var(--label);padding:13px 16px;display:block;-webkit-appearance:none;appearance:none}
+.ios-input::placeholder{color:var(--label3)}
+.ios-textarea{width:100%;background:transparent;border:none;outline:none;font-family:var(--font);font-size:16px;color:var(--label);padding:13px 16px;resize:none;height:80px;display:block}
+.ios-textarea::placeholder{color:var(--label3)}
+.row-divider{height:0.5px;background:var(--separator2);margin:0 16px}
+
+/* SCHOOL SEARCH */
+.school-search-wrap{position:relative}
+.school-input-row{display:flex;align-items:center}
+.school-input-row .ios-input{flex:1}
+.school-clear-btn{width:32px;height:32px;border-radius:50%;border:none;background:var(--label3);color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;margin-right:10px;line-height:1}
+.school-clear-btn.visible{display:flex}
+.school-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--card);border-radius:0 0 var(--radius-lg) var(--radius-lg);box-shadow:var(--shadow);z-index:200;max-height:240px;overflow-y:auto;display:none;border-top:0.5px solid var(--separator2)}
+.school-dropdown.open{display:block}
+.school-option{padding:12px 16px;font-size:15px;color:var(--label);cursor:pointer;border-bottom:0.5px solid var(--separator2)}
+.school-option:last-of-type{border-bottom:none}
+.school-option.hl{background:var(--blue-light);color:var(--blue)}
+
+/* SP BAR */
+.sp-bar{display:flex;align-items:center;background:var(--card);border-radius:var(--radius-lg);padding:13px 16px;box-shadow:var(--shadow-sm);gap:12px}
+.sp-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;text-transform:uppercase}
+.sp-info{flex:1;min-width:0}
+.sp-name{font-size:15px;font-weight:700;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-hint{font-size:12px;color:var(--label2);margin-top:1px}
+.sp-change-btn{background:var(--bg);border:none;border-radius:20px;padding:6px 14px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;flex-shrink:0}
+
+/* CART */
+.cart-empty-card{background:var(--card);border-radius:var(--radius-lg);padding:24px 16px;text-align:center;box-shadow:var(--shadow-sm)}
+.cart-empty-icon{font-size:32px;margin-bottom:8px}
+.cart-empty-text{font-size:15px;font-weight:500;color:var(--label2)}
+.cart-item-card{background:var(--card);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:12px;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
+.cart-item-icon{width:36px;height:36px;border-radius:9px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cart-item-body{flex:1;min-width:0}
+.cart-item-name{font-size:15px;font-weight:600;color:var(--label);display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.cart-item-detail{font-size:13px;color:var(--label2);margin-top:3px;line-height:1.5}
+.cart-item-skus{font-family:monospace;font-size:11px;color:var(--label2);margin-top:3px;line-height:1.5}
+.cart-remove-btn{width:28px;height:28px;border-radius:50%;background:var(--red-light);border:none;color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+
+/* ITEM TYPE CARDS */
+.item-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;padding:14px 16px 16px}
+.item-type-card{background:var(--bg);border:1.5px solid var(--separator);border-radius:var(--radius);padding:14px 6px 11px;cursor:pointer;transition:all .18s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.item-type-card.selected{background:var(--blue-light);border-color:var(--blue)}
+.item-type-card:active{transform:scale(0.95)}
+.item-type-card-icon{font-size:26px;line-height:1}
+.item-type-card-label{font-size:12px;font-weight:600;color:var(--label2);line-height:1.2}
+.item-type-card.selected .item-type-card-label{color:var(--blue)}
+.other-select-wrap{padding:0 16px 14px;display:none}
+.other-select-wrap.visible{display:block}
+
+/* COLOR CHIPS */
+.color-chips-wrap{padding:12px 16px 16px}
+.color-chips-grid{display:flex;flex-wrap:wrap;gap:8px}
+.color-chip{display:inline-flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--separator);border-radius:22px;padding:7px 13px 7px 8px;cursor:pointer;transition:all .15s;font-family:var(--font);font-size:13px;font-weight:600;color:var(--label2)}
+.color-chip.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.color-chip:active{transform:scale(0.95)}
+.color-swatch{width:18px;height:18px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.1)}
+
+/* SIZE GRID */
+.size-wrap{padding:12px 16px 16px;background:var(--card)}
+.size-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.size-btn{background:var(--bg);border:1.5px solid var(--separator);border-radius:var(--radius-sm);color:var(--label2);font-family:var(--font);font-weight:600;font-size:14px;padding:11px 4px;cursor:pointer;transition:all .15s;text-align:center}
+.size-btn.selected{background:var(--blue);border-color:var(--blue);color:#fff;transform:scale(1.04);box-shadow:0 2px 8px rgba(0,122,255,0.3)}
+
+/* PRODUCT LIST */
+.product-group-header{font-size:11px;font-weight:700;color:var(--label2);text-transform:uppercase;letter-spacing:0.6px;padding:10px 16px 5px;background:var(--bg)}
+.product-row{display:flex;align-items:center;padding:13px 16px;cursor:pointer;transition:background .12s;border-bottom:0.5px solid var(--separator2)}
+.product-row:last-of-type{border-bottom:none}
+.product-row.selected{background:var(--blue-light)}
+.product-row:active{background:var(--blue-light)}
+.product-row-name{flex:1;font-size:15px;font-weight:500;color:var(--label);line-height:1.3}
+.product-row.selected .product-row-name{color:var(--blue);font-weight:600}
+.product-row-chevron{color:var(--label3);font-size:13px;font-weight:700;margin-left:8px;flex-shrink:0}
+.product-row-sku{font-family:monospace;font-size:13px;color:var(--label2);margin-left:7px;font-weight:400;letter-spacing:0.2px}
+
+/* QTY STEPPER */
+.qty-wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--card)}
+.qty-label-text{font-size:16px;color:var(--label)}
+.qty-stepper{display:flex;align-items:center;background:var(--bg);border-radius:22px;overflow:hidden}
+.qty-btn{width:36px;height:36px;background:transparent;border:none;color:var(--blue);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:500;user-select:none}
+.qty-num{font-size:17px;font-weight:600;color:var(--label);min-width:32px;text-align:center}
+
+/* PATCH TOGGLE */
+.patch-wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--card)}
+.patch-toggle{display:flex;border-radius:8px;overflow:hidden;border:1.5px solid var(--separator)}
+.patch-btn{padding:7px 18px;border:none;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;background:var(--bg);color:var(--label2);transition:all .15s}
+.patch-btn.blank.selected{background:var(--green-light);color:var(--green)}
+.patch-btn.patch.selected{background:var(--blue-light);color:var(--blue)}
+.patch-badge{display:inline-flex;align-items:center;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700}
+.patch-badge.is-patch{background:var(--blue-light);color:var(--blue)}
+.patch-badge.is-blank{background:var(--green-light);color:var(--green)}
+
+/* ADD / SUBMIT BUTTONS */
+.add-item-btn{width:100%;background:var(--card);border:none;border-radius:var(--radius-lg);color:var(--blue);font-family:var(--font);font-weight:600;font-size:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;gap:8px}
+.add-item-btn:active{background:var(--blue-light)}
+.primary-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,122,255,0.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.primary-btn:active{transform:scale(0.98)}
+.primary-btn:disabled{opacity:.45;cursor:default}
+
+/* STEP INDICATOR */
+.step-row{display:flex;align-items:center;gap:8px;padding:0 4px;margin-bottom:6px}
+.step-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .2s}
+.step-dot.done{background:var(--green);color:#fff}
+.step-dot.active{background:var(--blue);color:#fff}
+.step-dot.idle{background:var(--bg);color:var(--label3);border:1.5px solid var(--separator)}
+.step-line{flex:1;height:1.5px;background:var(--separator);border-radius:1px}
+
+/* DYNAMIC SECTIONS */
+.dynamic-section{opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;max-height:0;overflow:hidden}
+.dynamic-section.visible{opacity:1;pointer-events:all;transform:translateY(0);max-height:2000px}
+
+/* TOAST */
+.toast{position:fixed;bottom:34px;left:50%;transform:translateX(-50%) translateY(80px) scale(0.95);background:rgba(50,50,50,0.92);backdrop-filter:blur(12px);color:#fff;padding:12px 22px;border-radius:22px;font-weight:600;font-size:14px;z-index:999;transition:transform .35s cubic-bezier(.34,1.4,.64,1),opacity .25s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.25);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0) scale(1);opacity:1}
+.toast.error{background:rgba(255,59,48,0.92)}
+
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;animation:fadeBackdrop .2s ease}
+@keyframes fadeBackdrop{from{opacity:0}to{opacity:1}}
+.modal-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:12px 24px 48px;width:100%;animation:sheetUp .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--separator);border-radius:2px;margin:0 auto 22px}
+.modal-title{font-size:24px;font-weight:800;color:var(--label);letter-spacing:-0.5px;margin-bottom:6px}
+.modal-sub{font-size:15px;color:var(--label2);margin-bottom:24px;line-height:1.5}
+.modal-input{width:100%;background:var(--bg);border:none;outline:none;border-radius:var(--radius-lg);font-family:var(--font);font-size:18px;font-weight:500;color:var(--label);padding:16px 18px;margin-bottom:14px;-webkit-appearance:none}
+.modal-input::placeholder{color:var(--label3)}
+.modal-confirm-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-lg);padding:16px;font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,122,255,0.3)}
+
+@keyframes springIn{from{opacity:0;transform:scale(0.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.mt8{margin-top:8px}
+
+/* LIVE ORDER TRACKER */
+.live-order-card{background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px;animation:springIn .3s cubic-bezier(.34,1.4,.64,1)}
+.live-order-accent{height:4px}
+.live-order-accent.requested{background:linear-gradient(90deg,var(--orange),#FFCC00)}
+.live-order-accent.retrieving{background:linear-gradient(90deg,var(--blue),#5856D6)}
+.live-order-accent.ready{background:linear-gradient(90deg,var(--purple),#5856D6)}
+.live-order-accent.nostock{background:linear-gradient(90deg,var(--red),#FF6B6B)}
+.live-order-body{padding:13px 16px}
+.live-order-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.live-order-family{font-size:16px;font-weight:800;color:var(--label);letter-spacing:-0.3px}
+.live-order-meta{font-size:12px;color:var(--label2);margin-top:2px}
+.live-order-status{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;flex-shrink:0}
+.live-order-status.requested{background:var(--orange-light);color:var(--orange)}
+.live-order-status.retrieving{background:var(--blue-light);color:var(--blue)}
+.live-order-status.ready{background:var(--purple-light);color:var(--purple)}
+.live-order-status.nostock{background:var(--red-light);color:var(--red)}
+.partial-warning{display:inline-flex;align-items:center;gap:4px;background:var(--orange-light);color:var(--orange);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;margin-top:7px}
+.live-order-note{font-size:12px;color:var(--label2);font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid var(--separator2)}
+.unable-items-list{margin-top:8px;padding-top:7px;border-top:1px solid var(--separator2)}
+.unable-items-label{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.unable-item-row{font-size:12px;color:var(--label2);margin-bottom:3px;line-height:1.4}
+.unable-item-sku{font-family:monospace;font-size:11px;font-weight:600;background:var(--red-light);color:var(--red);border-radius:4px;padding:1px 5px;margin-left:4px}
+.orders-empty{text-align:center;padding:20px;background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.orders-empty-text{font-size:14px;color:var(--label2)}
+.notif-banner{display:flex;align-items:center;gap:10px;background:var(--blue-light);border-radius:var(--radius-lg);padding:12px 16px;margin:10px 0;font-size:13px;color:var(--blue)}
+.notif-banner-txt{flex:1;font-weight:500}
+.notif-enable-btn{background:var(--blue);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-mark">AU</div>
+    <div class="logo-text">
+      <div class="logo-name">Anton Uniforms</div>
+      <div class="logo-sub">Sales Floor</div>
+    </div>
+  </div>
+  <div class="conn-status connecting" id="conn-status">
+    <div class="conn-dot pulse"></div>
+    <span id="conn-text">Connecting</span>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">New Request</div>
+    <div class="page-sub">Build your order, then send to warehouse</div>
+  </div>
+
+  <!-- Salesperson -->
+  <div class="ios-section">
+    <div class="ios-section-label">Selling as</div>
+    <div class="sp-bar" id="sp-bar">
+      <div class="sp-avatar" id="sp-avatar">?</div>
+      <div class="sp-info">
+        <div class="sp-name" id="sp-name-display">Loading…</div>
+        <div class="sp-hint">All requests tagged to you</div>
+      </div>
+      <button class="sp-change-btn" onclick="promptName(true)">Not you?</button>
+    </div>
+  </div>
+
+  <!-- Live Order Tracker -->
+  <div id="notif-banner" class="notif-banner" style="display:none">
+    <span class="notif-banner-txt">🔔 Get notified when your orders are ready</span>
+    <button class="notif-enable-btn" id="notif-enable-btn">Enable</button>
+  </div>
+  <div class="ios-section" id="live-orders-section" style="display:none">
+    <div class="ios-section-label">Your Active Orders</div>
+    <div id="live-orders-list"></div>
+  </div>
+
+  <!-- Family Name -->
+  <div class="ios-section">
+    <div class="ios-section-label">Family Name <span style="color:var(--red);font-size:12px">Required</span></div>
+    <div class="ios-card">
+      <input class="ios-input" type="text" id="family-name" placeholder="e.g. Smith Family" autocomplete="off" autocorrect="off" autocapitalize="words">
+    </div>
+  </div>
+
+  <!-- Step 1: School — fuzzy search -->
+  <div class="ios-section">
+    <div class="step-row">
+      <div class="step-dot active" id="step1-dot">1</div>
+      <div class="step-line"></div>
+      <div class="step-dot idle" id="step2-dot">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot idle" id="step3-dot">3</div>
+      <div class="step-line"></div>
+      <div class="step-dot idle" id="step4-dot">4</div>
+    </div>
+    <div class="ios-section-label" style="margin-top:10px">Step 1 — School</div>
+    <div class="school-search-wrap">
+      <div class="ios-card">
+        <div class="school-input-row">
+          <input class="ios-input" type="text" id="school-input" placeholder="Type to search school…" autocomplete="off" autocorrect="off" autocapitalize="words">
+          <button class="school-clear-btn" id="school-clear-btn" aria-label="Clear school">✕</button>
+        </div>
+      </div>
+      <div class="school-dropdown" id="school-dropdown"></div>
+    </div>
+  </div>
+
+  <!-- Step 2: Product (two-level: type grid → specific product) -->
+  <div class="ios-section dynamic-section" id="section-item">
+    <div class="ios-section-label">Step 2 — Product</div>
+    <div class="ios-card">
+      <!-- Catalog: type grid (dynamic per school) -->
+      <div id="type-grid-wrap" style="display:none">
+        <div id="type-grid" class="item-type-grid"></div>
+      </div>
+      <!-- Catalog: specific products for selected type -->
+      <div id="catalog-products" style="display:none"></div>
+      <!-- Essentials fallback -->
+      <div id="essentials-fallback" style="display:none">
+        <div class="item-type-grid">
+          <button id="itype-polo" class="item-type-card" onclick="selectItemType('Polo',this)"><div class="item-type-card-icon">👔</div><div class="item-type-card-label">Polo</div></button>
+          <button id="itype-shorts" class="item-type-card" onclick="selectItemType('Shorts',this)"><div class="item-type-card-icon">🩳</div><div class="item-type-card-label">Shorts</div></button>
+          <button id="itype-pants" class="item-type-card" onclick="selectItemType('Pants',this)"><div class="item-type-card-icon">👖</div><div class="item-type-card-label">Pants</div></button>
+          <button id="itype-skirt" class="item-type-card" onclick="selectItemType('Skirt / Skort',this)"><div class="item-type-card-icon">👗</div><div class="item-type-card-label">Skirt / Skort</div></button>
+          <button id="itype-oxford" class="item-type-card" onclick="selectItemType('Oxford Shirt',this)"><div class="item-type-card-icon">🔘</div><div class="item-type-card-label">Oxford Shirt</div></button>
+          <button class="item-type-card" id="other-item-card" onclick="toggleOtherItem(this)"><div class="item-type-card-icon">＋</div><div class="item-type-card-label">Other</div></button>
+        </div>
+        <div class="other-select-wrap" id="other-select-wrap">
+          <select class="ios-input" id="other-item-select" onchange="selectOtherItemType(this.value)" style="margin-bottom:0">
+            <option value="">Select item type…</option>
+            <option>Button-Down Shirt</option><option>T-Shirt</option><option>Blouse</option>
+            <option>Cardigan / Sweater</option><option>Sweatshirt / Hoodie</option>
+            <option>Jacket / Fleece</option><option>Jumper / Dress</option>
+            <option>Vest</option><option>Tie</option><option>Belt</option>
+            <option>Socks / Tights</option><option>Sweatpants</option><option>PE Uniform</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Color -->
+  <div class="ios-section dynamic-section" id="section-color">
+    <div class="ios-section-label">Step 3 — Color</div>
+    <div class="ios-card">
+      <div class="color-chips-wrap">
+        <div class="color-chips-grid" id="color-chips-grid"></div>
+      </div>
+      <div id="plaid-select-wrap" style="display:none;padding:0 16px 14px">
+        <div class="row-divider" style="margin:0 0 14px"></div>
+        <select class="ios-input" id="plaid-select" onchange="selectPlaid(this.value)" style="margin-bottom:0;background:var(--bg);border-radius:var(--radius-sm)">
+          <option value="">Select plaid code…</option>
+          <option>Hamilton Plaid</option><option>Marymount Plaid</option><option>Wilson Plaid</option>
+          <option>Grant Plaid</option><option>Macbeth Plaid</option><option>Carden Plaid</option>
+          <option>Christopher Plaid</option><option>Alexander Plaid</option><option>Mayfair Plaid</option>
+          <option>Navy White Shadow Plaid</option><option>Fremont Plaid</option><option>Liberty Plaid</option>
+          <option>Douglas Plaid</option><option>Woodland Plaid</option><option>Belair Plaid</option>
+          <option>Tyler Plaid</option><option>PLD03E</option><option>PLD1A</option><option>PLD1B</option>
+          <option>PLD1F</option><option>PLD220</option><option>PLD246</option><option>PLD26</option>
+          <option>PLD2A</option><option>PLD2M</option><option>PLD35</option><option>PLD36</option>
+          <option>PLD38N</option><option>PLD41</option><option>PLD42</option><option>PLD46</option>
+          <option>PLD49</option><option>PLD50</option><option>PLD510</option><option>PLD56</option>
+          <option>PLD599</option><option>PLD69</option><option>PLD72</option><option>PLD73</option>
+          <option>PLD75</option><option>PLD79</option><option>PLD82</option><option>PLD83</option>
+          <option>PLD8B</option><option>PLD92</option><option>PLD93</option><option>PLD96</option>
+          <option>PLD98</option><option>LANCASTER</option><option>PLDAPU</option><option>PLDKW</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Sizes -->
+  <div class="ios-section dynamic-section" id="section-sizes">
+    <div class="ios-section-label">Step 4 — Sizes <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--label2)">— tap multiple</span></div>
+    <div class="ios-card">
+      <div class="size-wrap"><div class="size-grid" id="size-grid"></div></div>
+      <div class="row-divider"></div>
+      <div class="qty-wrap">
+        <span class="qty-label-text">Quantity <span style="font-size:13px;color:var(--label2);font-weight:400">per size</span></span>
+        <div class="qty-stepper">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-num" id="qty-display">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <div class="row-divider" id="patch-section-divider"></div>
+      <div class="patch-wrap" id="patch-wrap-el">
+        <span class="qty-label-text">Decoration</span>
+        <div class="patch-toggle">
+          <button class="patch-btn blank" id="patch-blank" onclick="setPatch(false)">Blank</button>
+          <button class="patch-btn patch selected" id="patch-patch" onclick="setPatch(true)">+ Patch</button>
+        </div>
+      </div>
+      <div class="row-divider"></div>
+      <textarea class="ios-textarea" id="item-notes" placeholder="Notes for this item (optional)"></textarea>
+    </div>
+  </div>
+
+  <div class="ios-section mt8 dynamic-section" id="section-add-btn">
+    <button class="add-item-btn" onclick="addToCart()"><span style="font-size:18px;line-height:1">＋</span> Add Item to Order</button>
+  </div>
+
+  <!-- Order Summary (bottom) -->
+  <div class="ios-section" style="margin-top:24px">
+    <div class="ios-section-label">Order Items (<span id="cart-count">0</span>)</div>
+    <div id="cart-display">
+      <div class="cart-empty-card">
+        <div class="cart-empty-icon">🛒</div>
+        <div class="cart-empty-text">No items yet — add items above</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ios-section mt8">
+    <button class="primary-btn" id="submit-btn" onclick="submitRequest()">Send to Warehouse</button>
+  </div>
+</div>
+
+<!-- Name Modal -->
+<div class="modal-backdrop" id="name-modal" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Who are you?</div>
+    <div class="modal-sub">Enter your name once — it stays set all session so every request is tagged to you.</div>
+    <input class="modal-input" type="text" id="modal-name-input" placeholder="Your name or station…" autocomplete="off" maxlength="40">
+    <button class="modal-confirm-btn" onclick="confirmName()">Start Taking Requests</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="product_catalog.js"></script>
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC6zm-642fbrpKRknIhJkTUm1esUsXDTHQ",
+  authDomain:"anton-uniforms.firebaseapp.com",
+  databaseURL:"https://anton-uniforms-default-rtdb.firebaseio.com",
+  projectId:"anton-uniforms",
+  storageBucket:"anton-uniforms.firebasestorage.app",
+  messagingSenderId:"539546407658",
+  appId:"1:539546407658:web:1b76e5334f7f87e6103d93"
+});
+const db=getDatabase(app), auth=getAuth(app);
+const reqRef=ref(db,'requests');
+
+// Connection
+const connEl=document.getElementById('conn-status'), connText=document.getElementById('conn-text');
+function setConn(s){ connEl.className='conn-status '+s; connEl.querySelector('.conn-dot').className='conn-dot'+(s==='connecting'?' pulse':''); connText.textContent=s==='online'?'Live':s==='offline'?'Offline':'Connecting'; }
+signInAnonymously(auth).catch(()=>setConn('offline'));
+let myOrders={}, prevStatuses=null;
+
+let swReg=null;
+async function initNotifications(){
+  if(!('serviceWorker' in navigator)||!('Notification' in window))return;
+  try{ swReg=await navigator.serviceWorker.register('./notifications-worker.js'); }catch{ return; }
+  if(Notification.permission==='granted'||Notification.permission==='denied')return;
+  document.getElementById('notif-banner').style.display='flex';
+}
+document.getElementById('notif-enable-btn').addEventListener('click',async()=>{
+  await Notification.requestPermission();
+  document.getElementById('notif-banner').style.display='none';
+});
+initNotifications();
+
+onValue(reqRef,(snap)=>{
+  setConn('online');
+  const all=snap.val()||{};
+  myOrders={};
+  Object.entries(all).forEach(([key,val])=>{ if(val.salesperson===sessionName) myOrders[key]=val; });
+  if(prevStatuses!==null&&swReg&&Notification.permission==='granted'){
+    Object.entries(myOrders).forEach(([key,order])=>{
+      const prev=prevStatuses[key];
+      if(!prev||prev===order.status)return;
+      if(order.status==='ready'&&!order.isPartial){
+        swReg.showNotification('🪡 Order Ready — Anton Uniforms',{body:`${order.familyName||'Your order'} is in the patch room`,tag:key,requireInteraction:true,vibrate:[200,100,200],data:{url:'./sales.html'}});
+      } else if(order.status==='ready'&&order.isPartial){
+        swReg.showNotification('⚠️ Partial Order — Anton Uniforms',{body:`${order.familyName||'Your order'} — some items unavailable`,tag:key,requireInteraction:true,vibrate:[200,100,200],data:{url:'./sales.html'}});
+      } else if(order.status==='nostock'){
+        swReg.showNotification('🚫 No Stock — Anton Uniforms',{body:`${order.familyName||'Your order'} — items unavailable, take pre-order`,tag:key,requireInteraction:true,vibrate:[300,100,300],data:{url:'./sales.html'}});
+      }
+    });
+  }
+  prevStatuses={};
+  Object.entries(myOrders).forEach(([key,order])=>{ prevStatuses[key]=order.status; });
+  renderMyOrders();
+},()=>setConn('offline'));
+
+// Session name
+let sessionName=sessionStorage.getItem('anton_sp_name')||'';
+function initName(){ if(!sessionName){ promptName(false); } else { renderSpBar(); } }
+function renderSpBar(){ const i=sessionName.split(' ').map(w=>w[0]).slice(0,2).join(''); document.getElementById('sp-avatar').textContent=i||'?'; document.getElementById('sp-name-display').textContent=sessionName; }
+window.promptName=(allowDismiss)=>{ const m=document.getElementById('name-modal'),inp=document.getElementById('modal-name-input'); m.style.display='flex'; inp.value=sessionName||''; setTimeout(()=>inp.focus(),350); m.onclick=(e)=>{ if(allowDismiss&&e.target===m) m.style.display='none'; }; };
+window.confirmName=()=>{ const v=document.getElementById('modal-name-input').value.trim(); if(!v){ document.getElementById('modal-name-input').focus(); return; } sessionName=v; sessionStorage.setItem('anton_sp_name',v); renderSpBar(); document.getElementById('name-modal').style.display='none'; };
+document.getElementById('modal-name-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.confirmName(); });
+initName();
+
+// Schools list
+const SCHOOLS=[
+  'Anthem Preparatory Academy','Archway Anthem','Archway Arete',
+  'Archway Chandler','Archway Cicero','Archway Glendale',
+  'Archway Lincoln','Archway North Phoenix','Archway Roosevelt',
+  'Archway Scottsdale','Archway Trivium','Archway Veritas',
+  'Arete Preparatory Academy','Arizona College Preparatory',
+  'Arrowhead Christian Academy','Blessed Sacrament Catholic School',
+  'Candeo North Scottsdale','Candeo Peoria','Caritas Christian Academy','Champion Schools',
+  'Chandler Preparatory Academy','Christ Lutheran',
+  'Christ The King Catholic School','Cicero Preparatory Academy',
+  'Collaborative Academy for Leadership',
+  'Essentials',
+  'Glendale Preparatory Academy','Grace Christian Academy',
+  'Heritage Academy','Lincoln Preparatory Academy',
+  'Madison Traditional Academy',
+  'Maricopa Institute of Technology','Maryvale Preparatory Academy','Most Holy Trinity',
+  'North Phoenix Preparatory','Notre Dame Preparatory High School',
+  'Our Lady Of Mount Carmel','Our Lady Of Perpetual Help Glendale',
+  'Our Lady Of Perpetual Help Scottsdale','Our Lady Of Sorrows',
+  'Paradise Valley Christian Preparatory','Paul Revere Academy',
+  'Queen Of Peace Catholic School','Rancho Solano',
+  'Redeemer Christian Academy','Roosevelt Preparatory',
+  'Sacred Heart Catholic School',
+  'Scottsdale Christian Academy','Scottsdale Preparatory Academy',
+  'Seton Catholic Preparatory','St. Agnes Catholic School',
+  'St. Catherine Of Siena','St. Gregory Catholic School',
+  'St. John Bosco Catholic School','St. John Paul II Catholic High School',
+  'St. Leander School','St. Mary Basha Catholic School',"St. Mary's High School",
+  'St. Theresa Catholic School','St. Thomas Aquinas',
+  'St. Timothy Catholic School','St. Vincent de Paul Catholic School',
+  'Trivium Preparatory Academy','Veritas Preparatory Academy',
+  'Ville De Marie Academy','Xavier College Preparatory'
+];
+
+const SCHOOL_CODES={
+  'ANP':'Anthem Preparatory Academy','AAN':'Archway Anthem','AAR':'Archway Arete',
+  'ACH':'Archway Chandler','AGL':'Archway Glendale','ALI':'Archway Lincoln',
+  'APX':'Archway North Phoenix','ARO':'Archway Roosevelt','ASC':'Archway Scottsdale',
+  'AAT':'Archway Trivium','AVE':'Archway Veritas','ARP':'Arete Preparatory Academy',
+  'ACP':'Arizona College Preparatory','BSC':'Blessed Sacrament Catholic School',
+  'CNS':'Candeo North Scottsdale','CAP':'Candeo Peoria','CCC':'Caritas Christian Academy',
+  'CSS':'Champion Schools','CHP':'Chandler Preparatory Academy','CLN':'Christ Lutheran',
+  'CTK':'Christ The King Catholic School','CIP':'Cicero Preparatory Academy',
+  'CAL':'Collaborative Academy for Leadership','GLP':'Glendale Preparatory Academy',
+  'GCA':'Grace Christian Academy','HAS':'Heritage Academy','LIP':'Lincoln Preparatory Academy',
+  'MTA':'Madison Traditional Academy','MIT':'Maricopa Institute of Technology',
+  'MAP':'Maryvale Preparatory Academy','MHT':'Most Holy Trinity',
+  'NPP':'North Phoenix Preparatory','NDP':'Notre Dame Preparatory High School',
+  'OLM':'Our Lady Of Mount Carmel','OLG':'Our Lady Of Perpetual Help Glendale',
+  'OLP':'Our Lady Of Perpetual Help Scottsdale','OLS':'Our Lady Of Sorrows',
+  'PVC':'Paradise Valley Christian Preparatory','PRA':'Paul Revere Academy',
+  'QOP':'Queen Of Peace Catholic School','RSP':'Rancho Solano','ROP':'Roosevelt Preparatory',
+  'SHC':'Sacred Heart Catholic School','SAC':'St. Agnes Catholic School',
+  'SCS':'St. Catherine Of Siena','SGC':'St. Gregory Catholic School',
+  'SJB':'St. John Bosco Catholic School','SJP':'St. John Paul II Catholic High School',
+  'SLS':'St. Leander School','SMB':'St. Mary Basha Catholic School',
+  'SMH':"St. Mary's High School",'STC':'St. Theresa Catholic School',
+  'STA':'St. Thomas Aquinas','SVP':'St. Vincent de Paul Catholic School',
+  'SCA':'Scottsdale Christian Academy','SCP':'Scottsdale Preparatory Academy',
+  'SEC':'Seton Catholic Preparatory','STM':'St. Timothy Catholic School',
+  'TRP':'Trivium Preparatory Academy','VEP':'Veritas Preparatory Academy',
+  'VDM':'Ville De Marie Academy','XCP':'Xavier College Preparatory',
+};
+
+// Outerwear types grouped under one card
+const OUTERWEAR_TYPES=new Set(['Jacket','Sweatshirt / Hoodie','Vest','Cardigan']);
+
+// Item types that never get patched — hide decoration toggle
+const NO_PATCH_TYPES=new Set(['Pants','Shorts','Skirt / Skort','Jumper / Dress']);
+
+// Builder state
+let cart=[], selectedSizes=new Set(), builderItemType='', selectedColor='', selectedProduct=null, qty=1, needsPatch=true;
+let selectedSchool='';
+
+// School search
+const schoolInput=document.getElementById('school-input');
+const schoolDrop=document.getElementById('school-dropdown');
+
+function schoolMatches(school,query){
+  const q=query.toLowerCase().trim();
+  if(!q)return false;
+  if(SCHOOL_CODES[query.trim().toUpperCase()]===school)return true;
+  const schoolWords=school.toLowerCase().split(/[\s.,\-']+/).filter(Boolean);
+  const queryWords=q.split(/[\s.,\-']+/).filter(Boolean);
+  return queryWords.every(qw=>schoolWords.some(sw=>sw.startsWith(qw)));
+}
+
+schoolInput.addEventListener('input',()=>{
+  const q=schoolInput.value.trim();
+  if(!q){
+    if(selectedSchool){selectedSchool='';onSchoolChange();}
+    schoolDrop.classList.remove('open');
+    return;
+  }
+  const matches=SCHOOLS.filter(s=>schoolMatches(s,q));
+  if(!matches.length){schoolDrop.classList.remove('open');return;}
+  schoolDrop.innerHTML=matches.map(s=>`<div class="school-option" data-school="${esc(s)}">${esc(s)}</div>`).join('');
+  schoolDrop.querySelectorAll('.school-option').forEach(opt=>{
+    opt.addEventListener('mousedown',e=>{e.preventDefault();selectSchool(opt.dataset.school);});
+  });
+  schoolDrop.classList.add('open');
+});
+
+schoolInput.addEventListener('blur',()=>{
+  setTimeout(()=>{
+    schoolDrop.classList.remove('open');
+    schoolInput.value=selectedSchool;
+  },150);
+});
+
+function selectSchool(school){
+  selectedSchool=school;
+  schoolInput.value=school;
+  schoolDrop.classList.remove('open');
+  document.getElementById('school-clear-btn').classList.add('visible');
+  onSchoolChange();
+}
+
+document.getElementById('school-clear-btn').addEventListener('click',()=>{
+  selectedSchool='';
+  schoolInput.value='';
+  schoolDrop.classList.remove('open');
+  document.getElementById('school-clear-btn').classList.remove('visible');
+  schoolInput.focus();
+  onSchoolChange();
+});
+
+// Step helpers
+function setStep(n){ for(let i=1;i<=4;i++){ const d=document.getElementById('step'+i+'-dot'); if(!d)continue; d.className=i<n?'step-dot done':i===n?'step-dot active':'step-dot idle'; d.textContent=i<n?'✓':i; } }
+function showSection(id){ document.getElementById(id).classList.add('visible'); }
+function hideSection(id){ document.getElementById(id).classList.remove('visible'); }
+
+// Essentials fallback inventory
+const ITEM_DATA={
+  'Polo':{colors:[{name:'White',hex:'#FFFFFF'},{name:'Navy',hex:'#1a2d5a'},{name:'Light Blue',hex:'#add8e6'},{name:'Dark Navy',hex:'#0d1b3e'},{name:'Red',hex:'#cc2222'},{name:'Black',hex:'#111111'},{name:'Dark Green',hex:'#1a4a2e'},{name:'Royal',hex:'#2055b8'},{name:'Cardinal',hex:'#8b1a2e'},{name:'Purple',hex:'#5b2a8e'},{name:'Ash Grey',hex:'#b0b0b0'},{name:'Maroon',hex:'#6b1a2a'},{name:'Gold',hex:'#c9a84c'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','XS','S','M','L','XL','2XL','3XL']},
+  'Shorts':{colors:[{name:'Khaki',hex:'#c8a96e'},{name:'Navy',hex:'#1a2d5a'},{name:'White',hex:'#FFFFFF'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Royal',hex:'#2055b8'},{name:'Green',hex:'#2a6e3a'},{name:'Red',hex:'#cc2222'},{name:'Sky Blue',hex:'#87ceeb'}],sizes:['YXXXS','YXXS','YXS','YS','YM','YL','YXL','4','6','8','10','12','14','16','18','XS','S','M','L','XL','2XL','26','28']},
+  'Pants':{colors:[{name:'Khaki',hex:'#c8a96e'},{name:'Navy',hex:'#1a2d5a'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Charcoal',hex:'#444444'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','XS','S','M','L','XL','2XL','26','28','30','32','34','36','38']},
+  'Skirt / Skort':{colors:[{name:'Navy',hex:'#1a2d5a'},{name:'Khaki',hex:'#c8a96e'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Plaid',hex:null,isPlaid:true}],sizes:['3','4','5','6','6X','7','8','10','12','14','16','18','2','XS','S','M','L','XL']},
+  'Oxford Shirt':{colors:[{name:'White',hex:'#FFFFFF'},{name:'Light Blue',hex:'#add8e6'},{name:'Blue',hex:'#3a6ab8'}],sizes:['YXXS','YXS','YS','YM','YL','YXL','4','6','8','10','12','14','16','18','XS','S','M','L','XL','2XL']}
+};
+const OTHER_COLORS=[{name:'Navy',hex:'#1a2d5a'},{name:'White',hex:'#FFFFFF'},{name:'Khaki',hex:'#c8a96e'},{name:'Black',hex:'#111111'},{name:'Grey',hex:'#888888'},{name:'Red',hex:'#cc2222'},{name:'Royal',hex:'#2055b8'},{name:'Light Blue',hex:'#add8e6'},{name:'Dark Green',hex:'#1a4a2e'}];
+const OTHER_SIZES=['XS','S','M','L','XL','2XL','4','6','8','10','12','14','16'];
+
+const COLOR_HEX={
+  'ash gray':'#b0b0b0','ash grey':'#b0b0b0','black':'#111111','blue':'#3a6ab8',
+  'burgundy':'#800020','cardinal':'#8b1a2e','charcoal':'#444444','columbia blue':'#c4d8e2',
+  'cream':'#fffdd0','crimson':'#8b0000','dark green':'#1a4a2e','dark navy':'#0d1b3e',
+  'forest green':'#228b22','gold':'#c9a84c','green':'#2a6e3a','grey':'#888888','gray':'#888888',
+  'hunter green':'#355e3b','kelly green':'#4cbb17','khaki':'#c8a96e','light blue':'#add8e6',
+  'light grey':'#d3d3d3','maroon':'#6b1a2a','navy':'#1a2d5a','orange':'#ff8c00','pink':'#ffb6c1',
+  'purple':'#5b2a8e','red':'#cc2222','royal':'#2055b8','royal blue':'#2055b8',
+  'scarlet':'#ff2400','silver':'#c0c0c0','sky blue':'#87ceeb','sport grey':'#b8b8b8',
+  'tan':'#d2b48c','white':'#FFFFFF','yellow':'#f5c518'
+};
+
+const TYPE_ICONS={
+  'Polo':'👔','Oxford Shirt':'🔘','Shorts':'🩳','Pants':'👖',
+  'Skirt / Skort':'👗','Outerwear':'🧥',
+  'Jacket':'🧥','Fleece':'🧥','Sweatshirt / Hoodie':'🧥','Hoodie':'🧥',
+  'Sweatpants':'👖','Cardigan':'🧶','Cardigan / Sweater':'🧶',
+  'Vest':'🦺','Blazer':'👔','Jumper / Dress':'🩱','T-Shirt':'👕',
+  'Button-Down Shirt':'👔','Blouse':'👗','Tie':'👔','Belt':'⬛',
+  'Socks / Tights':'🧦','PE Uniform':'🏃','Other':'＋'
+};
+
+const TYPE_ORDER=['Polo','Oxford Shirt','Pants','Shorts','Skirt / Skort','Outerwear','Sweatpants','Blazer','Jumper / Dress','T-Shirt','Tie','Belt','Socks / Tights','PE Uniform','Other'];
+
+// Catalog helpers
+function getSchoolProducts(school){
+  if(typeof window.PRODUCT_CATALOG==='undefined') return null;
+  return window.PRODUCT_CATALOG[school]||null;
+}
+function catalogColorsToChips(colorNames){
+  return colorNames.map(name=>{
+    const isPlaid=/plaid|^pld/i.test(name);
+    return{name,hex:isPlaid?null:(COLOR_HEX[name.toLowerCase()]||'#888888'),isPlaid};
+  });
+}
+
+// Two-level product selection
+function renderTypeGrid(products){
+  const wrap=document.getElementById('type-grid-wrap');
+  const grid=document.getElementById('type-grid');
+  const catProd=document.getElementById('catalog-products');
+  const ess=document.getElementById('essentials-fallback');
+  if(!products||products.length===0){wrap.style.display='none';catProd.style.display='none';ess.style.display='block';return;}
+  ess.style.display='none'; catProd.style.display='none';
+  const rawTypes=new Set(products.map(p=>p.itemType));
+  const hasOuterwear=[...OUTERWEAR_TYPES].some(t=>rawTypes.has(t));
+  const effectiveTypes=new Set();
+  rawTypes.forEach(t=>{
+    if(OUTERWEAR_TYPES.has(t)){if(hasOuterwear)effectiveTypes.add('Outerwear');}
+    else{effectiveTypes.add(t);}
+  });
+  const types=TYPE_ORDER.filter(t=>effectiveTypes.has(t)).concat([...effectiveTypes].filter(t=>!TYPE_ORDER.includes(t)));
+  grid.innerHTML=types.map(type=>`<button class="item-type-card" data-type="${esc(type)}"><div class="item-type-card-icon">${TYPE_ICONS[type]||'📦'}</div><div class="item-type-card-label">${esc(type)}</div></button>`).join('');
+  grid.querySelectorAll('.item-type-card').forEach(btn=>btn.addEventListener('click',()=>selectCatalogType(btn.dataset.type,btn)));
+  wrap.style.display='block';
+}
+
+function genderGroup(product){
+  const t=(product.title+' '+product.displayTitle).toLowerCase();
+  if(/\bgirls?\b|\bwomens?\b|\bladies\b|\bfemale\b/.test(t)) return 'Girls';
+  if(/\bboys?\b|\bmens?\b|\bmale\b/.test(t)) return 'Boys';
+  return 'Unisex';
+}
+
+function selectCatalogType(type,btn){
+  document.querySelectorAll('#type-grid .item-type-card').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  builderItemType=type; selectedProduct=null; selectedColor=''; selectedSizes=new Set();
+  const products=getSchoolProducts(selectedSchool)||[];
+  const filtered=type==='Outerwear'
+    ?products.filter(p=>OUTERWEAR_TYPES.has(p.itemType))
+    :products.filter(p=>p.itemType===type);
+  const catProd=document.getElementById('catalog-products');
+  catProd.style.display='block';
+
+  const girls=filtered.filter(p=>genderGroup(p)==='Girls');
+  const boys=filtered.filter(p=>genderGroup(p)==='Boys');
+  const unisex=filtered.filter(p=>genderGroup(p)==='Unisex');
+  const hasGender=girls.length>0||boys.length>0;
+
+  function baseSkuOf(p){const s=p.variants[0]?.sku||'';return s.split('-')[0]||'';}
+  function productRows(list){
+    return list.map(p=>{
+      const sku=baseSkuOf(p);
+      return `<div class="product-row" data-handle="${esc(p.handle)}"><span class="product-row-name">${esc(p.displayTitle)}${sku?`<span class="product-row-sku">${esc(sku)}</span>`:''}</span><span class="product-row-chevron">›</span></div>`;
+    }).join('');
+  }
+
+  catProd.innerHTML=hasGender
+    ?(girls.length?`<div class="product-group-header">Girls</div>${productRows(girls)}`:'')
+     +(boys.length?`<div class="product-group-header">Boys</div>${productRows(boys)}`:'')
+     +(unisex.length?`<div class="product-group-header">Unisex</div>${productRows(unisex)}`:'')
+    :`<div class="product-group-header">${esc(type)}</div>${productRows(unisex)}`;
+
+  catProd.querySelectorAll('.product-row').forEach(row=>row.addEventListener('click',()=>selectProduct(row.dataset.handle,row)));
+  hideSection('section-color'); hideSection('section-sizes'); hideSection('section-add-btn');
+  setTimeout(()=>catProd.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+window.onSchoolChange=()=>{
+  const val=selectedSchool;
+  if(val){
+    showSection('section-item'); setStep(2);
+    const products=getSchoolProducts(val);
+    if(products&&products.length>0){renderTypeGrid(products);}
+    else{
+      document.getElementById('type-grid-wrap').style.display='none';
+      document.getElementById('catalog-products').style.display='none';
+      document.getElementById('essentials-fallback').style.display='block';
+    }
+  }else{
+    ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection); setStep(1);
+    document.getElementById('type-grid-wrap').style.display='none';
+    document.getElementById('catalog-products').style.display='none';
+    document.getElementById('essentials-fallback').style.display='none';
+  }
+  selectedProduct=null; builderItemType=''; selectedColor='';
+  document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
+  hideSection('section-color'); hideSection('section-sizes'); hideSection('section-add-btn');
+};
+
+function selectProduct(handle,btn){
+  const products=getSchoolProducts(selectedSchool);
+  if(!products)return;
+  selectedProduct=products.find(p=>p.handle===handle);
+  if(!selectedProduct)return;
+  builderItemType=selectedProduct.itemType; selectedColor=''; selectedSizes=new Set();
+  document.querySelectorAll('.product-row').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const colorNames=[...new Set(selectedProduct.variants.map(v=>v.color).filter(c=>c))];
+  if(colorNames.length===0){
+    selectedColor='';
+    renderSizeGrid(builderItemType,'');
+    updatePatchVisibility();
+    hideSection('section-color');
+    showSection('section-sizes'); setStep(4); showSection('section-add-btn');
+    setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+  }else{
+    renderColorChips(catalogColorsToChips(colorNames));
+    showSection('section-color'); setStep(3);
+    hideSection('section-sizes'); hideSection('section-add-btn');
+    if(colorNames.length===1){
+      const chip=document.querySelector('#color-chips-grid .color-chip');
+      if(chip) window.selectColor(chip.dataset.color,chip,chip.dataset.isplaid==='true');
+    }else{
+      setTimeout(()=>document.getElementById('section-color').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+    }
+  }
+}
+
+// Essentials fallback
+window.selectItemType=(type,btn)=>{
+  selectedProduct=null; builderItemType=type; selectedColor='';
+  document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('other-select-wrap').classList.remove('visible');
+  renderColorChips(ITEM_DATA[type]?.colors||OTHER_COLORS);
+  showSection('section-color'); setStep(3);
+  hideSection('section-sizes'); hideSection('section-add-btn');
+  selectedSizes=new Set();
+  setTimeout(()=>document.getElementById('section-color').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+};
+window.toggleOtherItem=(btn)=>{ btn.classList.toggle('selected'); document.getElementById('other-select-wrap').classList.toggle('visible'); document.getElementById('other-item-select').value=''; };
+window.selectOtherItemType=(val)=>{ if(!val)return; selectedProduct=null; builderItemType=val; selectedColor=''; document.getElementById('other-item-card').classList.add('selected'); renderColorChips(OTHER_COLORS); showSection('section-color'); setStep(3); hideSection('section-sizes'); hideSection('section-add-btn'); selectedSizes=new Set(); };
+
+function renderColorChips(colors){
+  const grid=document.getElementById('color-chips-grid');
+  document.getElementById('plaid-select-wrap').style.display='none';
+  document.getElementById('plaid-select').value='';
+  grid.innerHTML=colors.map(c=>{
+    const s=c.hex?(c.hex==='#FFFFFF'?'background:#fff;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,0.18);':'background:'+c.hex+';'):'background:repeating-linear-gradient(45deg,#c8a96e,#c8a96e 4px,#1a2d5a 4px,#1a2d5a 8px);';
+    return `<button class="color-chip${c.isPlaid?' plaid-chip':''}" data-color="${esc(c.name)}" data-isplaid="${c.isPlaid?'true':'false'}"><span class="color-swatch" style="${s}"></span>${c.name}</button>`;
+  }).join('');
+  grid.querySelectorAll('.color-chip').forEach(btn=>btn.addEventListener('click',()=>window.selectColor(btn.dataset.color,btn,btn.dataset.isplaid==='true')));
+}
+
+window.selectColor=(name,btn,isPlaid)=>{
+  document.querySelectorAll('.color-chip').forEach(b=>b.classList.remove('selected'));
+  if(btn) btn.classList.add('selected'); selectedColor=name;
+  if(isPlaid&&name.toLowerCase()==='plaid'){ document.getElementById('plaid-select-wrap').style.display='block'; document.getElementById('plaid-select').value=''; selectedColor=''; return; }
+  document.getElementById('plaid-select-wrap').style.display='none';
+  renderSizeGrid(builderItemType,name);
+  updatePatchVisibility();
+  showSection('section-sizes'); setStep(4); showSection('section-add-btn');
+  setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+};
+window.selectPlaid=(val)=>{ if(!val)return; selectedColor=val; renderSizeGrid(builderItemType,val); updatePatchVisibility(); showSection('section-sizes'); setStep(4); showSection('section-add-btn'); setTimeout(()=>document.getElementById('section-sizes').scrollIntoView({behavior:'smooth',block:'nearest'}),100); };
+
+function renderSizeGrid(type,color){
+  const grid=document.getElementById('size-grid');
+  selectedSizes=new Set();
+  let sizes;
+  if(selectedProduct){
+    if(color){
+      const cl=color.toLowerCase();
+      sizes=[...new Set(selectedProduct.variants.filter(v=>v.color.toLowerCase()===cl).map(v=>v.size).filter(s=>s))];
+    }else{
+      sizes=[...new Set(selectedProduct.variants.map(v=>v.size).filter(s=>s))];
+    }
+    if(sizes.length===0) sizes=(ITEM_DATA[type]||{}).sizes||OTHER_SIZES;
+  }else{
+    sizes=(ITEM_DATA[type]||{}).sizes||OTHER_SIZES;
+  }
+  grid.innerHTML=sizes.map(s=>`<button class="size-btn" data-size="${esc(s)}">${esc(s)}</button>`).join('');
+  grid.querySelectorAll('.size-btn').forEach(btn=>btn.addEventListener('click',()=>{ btn.classList.toggle('selected'); selectedSizes.has(btn.dataset.size)?selectedSizes.delete(btn.dataset.size):selectedSizes.add(btn.dataset.size); }));
+}
+
+function updatePatchVisibility(){
+  const hide=NO_PATCH_TYPES.has(builderItemType);
+  document.getElementById('patch-wrap-el').style.display=hide?'none':'';
+  document.getElementById('patch-section-divider').style.display=hide?'none':'';
+  needsPatch=hide?false:true;
+  document.getElementById('patch-blank').classList.toggle('selected',!needsPatch);
+  document.getElementById('patch-patch').classList.toggle('selected',needsPatch);
+}
+
+window.changeQty=(delta)=>{ qty=Math.max(1,Math.min(20,qty+delta)); document.getElementById('qty-display').textContent=qty; };
+window.setPatch=(p)=>{ needsPatch=p; document.getElementById('patch-blank').classList.toggle('selected',!p); document.getElementById('patch-patch').classList.toggle('selected',p); };
+
+window.addToCart=()=>{
+  if(!selectedSchool){toast('Select a school first',true);return;}
+  if(!builderItemType){toast('Select a product',true);return;}
+  const productHasColors=!selectedProduct||[...new Set(selectedProduct.variants.map(v=>v.color).filter(c=>c))].length>0;
+  if(!selectedColor&&productHasColors){toast('Select a color',true);return;}
+  if(selectedSizes.size===0){toast('Select at least one size',true);return;}
+  const notes=document.getElementById('item-notes').value.trim();
+  let skus={};
+  if(selectedProduct){
+    const cl=selectedColor.toLowerCase();
+    [...selectedSizes].forEach(size=>{
+      const v=selectedProduct.variants.find(v=>v.color.toLowerCase()===cl&&v.size===size);
+      if(v) skus[size]=v.sku;
+    });
+  }
+  cart.push({school:selectedSchool,itemType:builderItemType,productHandle:selectedProduct?.handle||'',productTitle:selectedProduct?.displayTitle||builderItemType,color:selectedColor,sizes:[...selectedSizes],qty,notes,skus,needsPatch});
+  resetBuilder(false); renderCart();
+  toast('Item added ✓');
+};
+
+window.removeFromCart=(idx)=>{ cart.splice(idx,1); renderCart(); };
+
+function renderCart(){
+  const el=document.getElementById('cart-display');
+  document.getElementById('cart-count').textContent=cart.length;
+  if(cart.length===0){ el.innerHTML='<div class="cart-empty-card"><div class="cart-empty-icon">🛒</div><div class="cart-empty-text">No items yet — add items above</div></div>'; return; }
+  el.innerHTML=cart.map((item,i)=>{
+    const title=item.productTitle||item.itemType;
+    const skuEntries=Object.entries(item.skus||{});
+    const skuHtml=skuEntries.length>0?`<div class="cart-item-skus">${skuEntries.map(([sz,sku])=>`${esc(sz)}: ${esc(sku)}`).join(' &nbsp; ')}</div>`:'';
+    const patchBadge=item.needsPatch
+      ?`<span class="patch-badge is-patch">+Patch</span>`
+      :`<span class="patch-badge is-blank">Blank</span>`;
+    return `<div class="cart-item-card">
+      <div class="cart-item-icon">👕</div>
+      <div class="cart-item-body">
+        <div class="cart-item-name">${esc(title)}${item.color?' — '+esc(item.color):''}${patchBadge}</div>
+        <div class="cart-item-detail">${esc(item.school)} · Sizes: <strong>${item.sizes.join(', ')}</strong> · Qty ${item.qty} each${item.notes?'<br><em>'+esc(item.notes)+'</em>':''}</div>
+        ${skuHtml}
+      </div>
+      <button class="cart-remove-btn" data-idx="${i}">✕</button>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.cart-remove-btn').forEach(btn=>btn.addEventListener('click',()=>window.removeFromCart(Number(btn.dataset.idx))));
+}
+
+function resetBuilder(fullReset){
+  if(fullReset){
+    selectedSchool='';
+    schoolInput.value='';
+    ['section-item','section-color','section-sizes','section-add-btn'].forEach(hideSection);
+    setStep(1);
+    document.getElementById('type-grid-wrap').style.display='none';
+    document.getElementById('catalog-products').style.display='none';
+    document.getElementById('essentials-fallback').style.display='none';
+  }else{
+    ['section-color','section-sizes','section-add-btn'].forEach(hideSection);
+    showSection('section-item'); setStep(2);
+    document.getElementById('catalog-products').style.display='none';
+    document.querySelectorAll('#type-grid .item-type-card').forEach(b=>b.classList.remove('selected'));
+  }
+  document.getElementById('item-notes').value='';
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.product-row').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.item-type-card').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.color-chip').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('other-select-wrap').classList.remove('visible');
+  document.getElementById('plaid-select-wrap').style.display='none';
+  selectedProduct=null; builderItemType=''; selectedColor=''; selectedSizes=new Set(); qty=1;
+  document.getElementById('qty-display').textContent='1';
+  needsPatch=true;
+  document.getElementById('patch-blank').classList.remove('selected');
+  document.getElementById('patch-patch').classList.add('selected');
+  document.getElementById('patch-wrap-el').style.display='';
+  document.getElementById('patch-section-divider').style.display='';
+}
+
+function renderMyOrders(){
+  const section=document.getElementById('live-orders-section');
+  const list=document.getElementById('live-orders-list');
+  const TEN_MIN=10*60*1000, TWENTY_MIN=20*60*1000;
+  const orders=Object.entries(myOrders).map(([key,val])=>({key,...val}))
+    .filter(r=>r.status!=='')
+    .filter(r=>!(r.status==='ready'&&r.completedAt&&(Date.now()-r.completedAt)>TEN_MIN))
+    .filter(r=>!(r.status==='nostock'&&r.noStockAt&&(Date.now()-r.noStockAt)>TWENTY_MIN))
+    .sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  if(orders.length===0){ section.style.display='none'; return; }
+  section.style.display='block';
+  const statusLabel={requested:'In Queue',retrieving:'Being Picked',ready:'In Patch Room',nostock:'No Stock — Take Pre-Order'};
+  const statusIcon={requested:'⏳',retrieving:'↗',ready:'🪡',nostock:'🚫'};
+  list.innerHTML=orders.map(r=>{
+    const item0=r.items?.[0];
+    const itemSummary=r.items&&r.items.length===1?(item0.productTitle||item0.itemType)+(item0.color?' · '+item0.color:''):((r.items||[]).length+' items');
+    const partialBadge=r.status==='ready'&&r.isPartial?'<div class="partial-warning">⚠ Partial — some items unavailable</div>':'';
+    const noteBadge=r.notes?`<div class="live-order-note">📝 ${esc(r.notes)}</div>`:'';
+    const showUnable=(r.status==='ready'&&r.isPartial)||r.status==='nostock';
+    const unableList=showUnable&&r.unableItems&&r.unableItems.length?`<div class="unable-items-list"><div class="unable-items-label">Unable to pick:</div>${r.unableItems.map(it=>`<div class="unable-item-row">• ${esc(it.productTitle||'')}${it.color?' — '+esc(it.color):''} · Size ${esc(it.size)}${it.sku?`<span class="unable-item-sku">${esc(it.sku)}</span>`:''}</div>`).join('')}</div>`:'';
+    return `<div class="live-order-card"><div class="live-order-accent ${r.status}"></div><div class="live-order-body"><div class="live-order-top"><div><div class="live-order-family">${esc(r.familyName||'—')}</div><div class="live-order-meta">${esc(item0?.school||'—')} · ${esc(itemSummary)}</div></div><div class="live-order-status ${r.status}">${statusIcon[r.status]||''} ${statusLabel[r.status]||r.status}</div></div>${partialBadge}${noteBadge}${unableList}</div></div>`;
+  }).join('');
+}
+
+window.submitRequest=async()=>{
+  if(!sessionName){promptName(false);return;}
+  const familyName=document.getElementById('family-name').value.trim();
+  if(!familyName){ document.getElementById('family-name').focus(); toast('Please enter a family name',true); return; }
+  if(cart.length===0){ toast('Add at least one item first',true); return; }
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true; btn.textContent='Sending…';
+  try{
+    await push(reqRef,{salesperson:sessionName,familyName,items:cart,status:'requested',claimedBy:'',time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),submittedAt:Date.now(),timestamp:Date.now()});
+    toast('✓ Sent to warehouse');
+    cart=[]; renderCart(); resetBuilder(true);
+    document.getElementById('family-name').value='';
+    renderMyOrders();
+  }catch(e){ toast('Failed — check connection',true); }
+  btn.disabled=false; btn.textContent='Send to Warehouse';
+};
+
+function toast(msg,isError){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(isError?' error':''); setTimeout(()=>t.className='toast'+(isError?' error':''),2800); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
